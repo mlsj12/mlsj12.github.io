@@ -14,9 +14,11 @@ img,
 picture,
 video,
 canvas,
-svg {
+svg,
+figure {
   display: block;
   max-width: 100%;
+  margin: 0;
 }
 
 body {
@@ -32,19 +34,39 @@ h1 {
   font-weight: 800;
 }
 
-h2 {
-  font-weight: 700;
-}
-
 .header {
   display: flex;
+  flex-direction: row;
   gap: 1em;
-  margin-top: 1em;
+  max-width: 100%;
 }
-
+.header figure {
+  margin: 0;
+}
 .header img {
   width: 50%;
   object-fit: cover;
+}
+.text{
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.text h2 {
+  font-weight: 700;
+  margin: 0;
+  align-items: center;
+  white-space: nowrap;
+}
+.text p {
+    margin-top: 1em;
+    width: 100%;
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+    margin-bottom: 2em;
 }
 
 .grid {

@@ -1,18 +1,150 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+ <head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+   <title>Mai Li's HCDE 439 Physical Computing Page!</title>
 
-    <link href="style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <h1>Example Student's Assignment 1!</h1>
-    <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 1!</p>
+   <link href="style.css" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+   <h1>Mai Li's Assignment 2!</h1>
+   <div class="header" style="margin-top: 2%;">
+    <img src="A1_schematic.JPG" alt="Page of grid paper with the assignment written out, schematic of three LED lights, 
+    calculations of resistance with red LEDs, and a pattern idea to create.">
+    <div class="text">
+      <h2>Schematic Explanation:</h2>
+      <p>
+        To begin this assignment, I documented the project's requirements and initial work. I then sketched the circuit 
+        schematics for the three LEDs. Initially, I was confused about connecting each LED to the 5V pin on the controller, 
+        which complicated resistor placement. However, I realized that each circuit connects to a separate pin that also 
+        supplies power, making the schematic easier to draw and understand. Since I used red LEDs with a 1.8V drop, each 
+        circuit required the same resistor value.
+      </p>
+      <h2>Resistance Calculations:</h2>
+      <p style="font-family: Noto Sans Math; font-size: larger; margin-bottom: 0%;">
+        5v - 1.8v = 20mA &times; R<br>
+        3.2v = 20mA &times; R<br>
+        R = 3.2v / 20mA</br>
+        R = 3.2v / 0.02m</br>
+        <b>R = 160Ω</b>
+      </p
+      <p style="display: inline;">
+        In the final circuit design, I selected a 220Ω resistor. According to the calculation, the circuit requires a minimum 
+        resistance of 160Ω to ensure a current of 20mA. Using a resistor with a slightly higher value than the minimum provides 
+        more protection of keeping the current lower than 20mA while the circuit still performs effectively.
+      </p>      
     </div>
-  </body>
+  </div>
+  <figcaption>A1: Blink! Write up</figcaption>
+  <div class="header">
+    <div class="text">
+      <h2 style="margin-top: 5%;">Circuit Explanation:</h2>
+      <p>
+        The next step I took was to bring my schematic to life! Since the confusion happened while drawing I didn't come across 
+        too many issues in this stage. I added the red wires to different pins on the Arduino that I was going to code and 
+        connected them to a single line on the breadboard. I then added each of the resistors to that same row to continue 
+        a single circuit. I started a new row of connections for each LED to touch the resistor and the next row over. This is 
+        the row that is connected to a black wire and goes to a ground pin back into the Arduino.
+      </p>
+      <h2 style="margin-top: 5%;">Playing Around!</h2>
+      <p>
+        Before I started coding, I attached the Arduino to my computer and changed each of the circuit starting points to the 
+        5V to make sure my circuits were indeed working, which they were. To get familiar with the system, I started tinkering 
+        with what we did in class, making the lights turn on and off. I made them blink SOS and created a wave effect between
+        the different LEDs. However, I did not include this as my final for A1: Blink! because I used ChatGPT to figure out
+        how to do exactly what I wanted to do. This was fun, but I didn't really understand anything in the actual code 
+        that made it work in the way I wanted. <br><br>
+        Instead, I did a more complex version of what we did in class for this assignment. LED1 blinks at 100ms, LED2 blinks
+        at 500ms, and LED3 blinks at 1000ms or every one second. For this, I coded everything myself and I understand how it
+        works. Each pin is coded independently with if it will be given power or no power and for how long using ``delay``.
+      </p>
+    </div>
+    <img src="A1_circuit_on.JPG" alt="Controller connected to bread board through red (power) and black (grounding) wires with 
+    three red LEDS in a row. The last one is on." style="margin-top: 5%;">
+  </div>
+  <p style="text-align: right;">A1: Blink! circuit photo</p>
+  <div class="header">
+    <img src="A1_gif.mp4" alt="Gif of the circuit running twice and then it loops back." style="margin-top: 5%;">
+    <div class="text">
+      <h2 style="margin-top: 5%;">Arduino Code:</h2>
+      <pre><code>
+// HCDE 439
+// Mai Li Jorgensen
+// A1: Blink!
+
+void setup() {
+ // set up code: on / off for different times
+ // pins 1 - 3 are treated as an output in this program
+ pinMode(1, OUTPUT);
+ pinMode(2, OUTPUT);
+ pinMode(3, OUTPUT);
+}
+
+void loop() {
+ // main code that repeats forever: on/off for different durations
+ // pin 1 will blink at 100ms and then turn off until the loop completes and starts over
+ // LED connected to pin 1 is turned
+ digitalWrite(1, HIGH);
+ // LED stays on as program pauses for 100ms
+ delay(100);
+ // LED in pin 1 is turned off
+ digitalWrite(1, LOW);
+ // program delays for 100ms
+ delay(100);
+
+ // pin 2 will blink at 500ms and turn off until the loop starts over
+ // LED connected to pin 2 is turned on
+ digitalWrite(2, HIGH);
+ // program delays for 500ms
+ delay(500);
+ // LED in pin 2 is turned off
+ digitalWrite(2, LOW);
+ // program delays the same amount (500ms)
+ delay(500);
+
+ // pin 3 will blink at 1000ms (1 second) and turn off until the loop starts again
+ // LED in pin 3 will turn on
+ digitalWrite(3, HIGH);
+ // program stops for a second
+ delay(1000);
+ // LED 3 is turned off
+ digitalWrite(3, LOW);
+ // program stops for another second
+ delay(1000);
+} </code></pre>
+  </div></div>
+  <p>A1: Blink! Gif of circuit working!</p>
+  <h2 style="margin-top: 5%;">Additional Questions:</h2>
+  <b style="font-size: larger;">1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a 
+    line for each of your 3 LEDs.</b>
+    <img src="A1_graph.jpg">
+    <p>A1: Blink Graph showing the voltage changes through time as the program continues. For the first LED (red), it 
+      turns on and off pretty frequently as shown in the graph. It turned on and off five times in the span of 1000ms or
+      one second. For the second LED (purple), it only turns on and off once in the span of one second, splitting the time 
+      in half. As for the last LED (blue), it is never off for the first second because it's delay of the program (keeping it 
+      on) is exactly one second or 1000ms!
+    </p>
+  <br>
+  <b style="font-size: larger;">2: How many LEDs could you blink independently with your Arduino? How much current would 
+    that draw?</b>
+    <p>
+      For the first question, this would depend on how many individual pins there are on the Arduino. To do more than pin 
+      available would be possible by adding more LEDs to the circuits, but that wouldn't be an independently run LED anymore. 
+      Looking at the controller, I could blink 14 different LEDs in the 0-13 numbered pins that are programmable. 
+      As for the current, each LED is its own circuit that should have no more than 20mA going through it. So if I were
+      to use all 14 pins for 14 LEDs, all using 20mA or less, I would have about 20mA x 14 circuits = 280mA. Running all 
+      14 pins, I should not exceed 280mA of current through the whole Arduino to keep it in a safe range. 
+    </p>
+  <br>
+  <b>3: How fast do you need to blink your LEDs until you no longer can tell that they are blinking?</b>
+  <p>
+    This was experimented on in my playing around. I had tested how much time in milliseconds had to be on and off to not
+    notice a difference. I first tried 10 and then 15. I couldn't see a difference in 10, but I could in 15ms intervals. 
+    However, I got confused and went up from 15 instead of down! I'm not sure how I got to that as the right way, but as I 
+    got to blinks every 50ms, I realized I was noticing it more and more. After this, I tried the experiment again and started
+    from 15ms and decreased the time. It was around 12 or 11ms where I couldn't tell the difference exactly!
+  </p>
+ </body>
 </html>
