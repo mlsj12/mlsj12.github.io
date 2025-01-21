@@ -4,15 +4,204 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-    <title>Example Student's HCDE 439 Physical Computing Page!</title>
+    <title>Mai Li's HCDE 439 Physical Computing Page!</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <h1>Example Student's Assignment 2!</h1>
-    <div class="header">
-      <img src="red-panda.jpg" />
-      <p>Here is all the documentation for assignment 2!</p>
+    <h1>Mai Li's Assignment 2!</h1>
+    <div class="header" style="margin-top: 2%;">
+      <img src="A2_schematic.jpg" alt="Page of grid paper of button schematic with a 10K Ω resistor, red LED with 220 Ω 
+      resistor, blue LED with 100 Ω resistor, and green LED with 220 Ω resistor." style="width: 50%;"/>
+      <div class="text">
+        <h2>Schematic Explanation:</h2>
+        <p>
+          Similar to Assignment 1, I began by documenting the project's requirements and initial work before sketching the 
+          circuit schematic. This time, I used an RGB LED with four prongs—one for each color and a common ground I did this 
+          because I thought it would be cool to incorporate the rainbow to better see the LEDs fade from one to the next. 
+          This time I had initially draw each circuit the same way with the resistor first and then the button/LED. This makes
+          more sense to me as the restriction happens before the action (even if it happens no matter where it is placed). 
+          Initially, I placed the resistor before the button/LED, thinking it made more sense to restrict current before the 
+          action. However, on the breadboard, the button didn't control the LED. Switching the resistor to follow the button 
+          and pin 2 connection resolved the issue.
+        </p>
+      </div>
     </div>
+    <figcaption>A2: Fade! Write up</figcaption>
+    <h2 style="margin-bottom: 10px;"">Calculations</h2>
+    <div class="header">
+      <p style="font-family: Noto Sans Math; font-size: larger; margin-bottom: 0%;">
+        <b>Red & green LED have 1.8V drop:</b><br>
+        5V - 1.8V = 20mA &times; R ---> <b>R = 160Ω</b>
+      </p>
+      <p style="font-family: Noto Sans Math; font-size: larger; margin-bottom: 0%; margin-left: 200px;">
+        <b>Blue LED has 3.3V drop:</b><br>
+        5V - 3.3V = 20mA &times; R ---> <b>R = 85Ω</b>
+      </p>
+    </div>
+    <p>For red and green, I used the 220Ω resistor and for blue I used 100Ω resistor as the calculations require that
+      number as the <b>minimum</b> amount of resistance to keep a 20mA current.
+    </p>
+    <p style="margin-bottom: 0%">
+      <b>Button has 10KΩ: We talked about this in class that the button will always be used with a 10KΩ resistor.</b>
+    </p>
+    <div class="header">
+      <div class="text">
+        <h2 style="margin-top: 5%;">Circuit Explanation:</h2>
+        <p>
+          After creating my schematic of each independent circuit it was time to actually create it on the board. Before I did
+          so, I also wrote out what I wanted to try to code: when the push button is pressed, the light will fade the rainbow.
+          I followed my first schematic of having the resistor before the button while doing the same for the LEDs as that had
+          been working so far. However, after I started coding the button and LEDs to communicate, it didn't work. The LED 
+          wouldn't detect when the button was pressed. <br>
+          Before I debugged this issue, I played around with what I wanted to happen when it was pressed, using LOW as the 
+          conditional to see if the code worked before messing with the button. I wanted to fade the rainbow when the button
+          was pressed but I wasn't entirely sure how to do that because I only have the three primary colors; I didn't know
+          how I was going to make all the colors. 
+        </p>
+        <h2>Debugging</h2>
+        <p>
+          Since I knew the button had worked before in class doing a simpler version of this assignment; I knew my circuits 
+          were the issue. I tried a couple times following the wires for all the LEDs and the circuit but this didn't work. I
+          then remembered that I had taken a photo of the circuit I created in class where my button did work. I went back to
+          the photo and that was where I learned the resistor was <i>after</i> the button. I tried this and my == HIGH worked.
+          I then researched this and learned that since the resistor is acting as a pull-up/pull-down, it has to go after
+          so that the status reads correctly or the current may float between numbers instead of being exact.
+        </p>
+      </div>
+      <img src="A2_image_1.png" alt="Controller on the side of breadboard with many colorful wires going
+      between them. An RGB LED is surrounded by three different resistors and a button is on the lower
+      part of the board with another resistor." style="margin-top: 5%;">
+    </div>
+    <p style="text-align: right;">A2: Fade! circuit photo</p>
+    <h2 style="margin-top: 5%;">Coding the Rainbow!</h2>
+    <p  style="margin-bottom: 0px;">
+      I figured out how to make the rainbow fade in a way that makes it look more "rainbow-y." It took a little 
+      math and knowing how coding languages work. I had the idea that the color from before had to be part of the next color's
+      fade to look correctly. I first didn't have any of the colors turn off, so it was ending by fading into white (all the
+      colors turned on). I then realized I needed to turn them off, but I turned them off abruptly half way through the next
+      color's fade. <br>
+      To accurately fade, the last color needs to fade out. Knowing how programming languages work, I took the variable <i>i</i>  
+      and subtracted it against 255 (the highest a color can fade to) to reverse the last color at the same time as the new color
+      grows more stronger. 
+    </p>
+
+    <div class="header" style="margin-top: 2%;">
+      <div class="text">
+        <h2>Gif:</h2>
+        <img src="A2_gif.gif" alt="Gif of circuit working. It blinks red, green, blue. When the button is pressed, the light
+        starts fading through the rainbow instead." style="width: 50%;"/>
+      </div class="text">
+      </div>
+    </div>
+    <figcaption>A2: Fade! gif of circuit blinking red, green, blue and fading when button is pressed.</figcaption>
+    <h2>Code</h2>
+    <pre><code>
+// HCDE 439
+// Mai Li Jorgensen
+// A2: Fade!
+
+void setup() {
+  // pin 2 is connected to the button to get if the button is pressed or not
+  pinMode(2, INPUT);
+  // pin 3 is connected to the RED LED
+  pinMode(3, OUTPUT);
+  // pin 5 is connected to the blue LED
+  pinMode(5, OUTPUT);
+  // pin 6 is connected to the green LED
+  pinMode(6, OUTPUT);
+ }
+ 
+ 
+ void loop() {
+  // save the status of button as a variable
+   int button_state = digitalRead(2);
+ 
+ 
+  // when the button is pushed, the led will fade the rainbow
+  if (button_state == HIGH) {
+    // fade to red
+    for (int i = 0; i < 255; i++) {
+      analogWrite(3, i);
+      delay(25);
+      // fade blue out
+      analogWrite(5, 255 - i);
+      delay(25);
+    }
+    // fade to green
+    for (int i = 0; i < 255; i++) {
+      analogWrite(6, i);
+      delay(25);
+      // fade red out
+      analogWrite(3, 255 - i);
+      delay(25);
+    }
+    // fade to blue
+    for (int i = 0; i < 255; i++) {
+      analogWrite(5, i);
+      delay(25);
+      // fade green out
+      analogWrite(6, 255 - i);
+      delay(25);
+    }
+  }
+  // if the button isn't pushed, the light will blink the three colors
+  else {
+    // red blink
+    digitalWrite(3, HIGH);
+    delay(500);
+    digitalWrite(3, LOW);
+    delay(500);
+ 
+ 
+    // green blink
+    digitalWrite(6, HIGH);
+    delay(500);
+    digitalWrite(6, LOW);
+    delay(500);
+ 
+ 
+    // blue blink
+    digitalWrite(5, HIGH);
+    delay(500);
+    digitalWrite(5, LOW);
+    delay(500);
+  }
+ } 
+    </code></pre>  
+    <h2 style="margin-top: 5%;">Additional Questions:</h2>
+  <b style="font-size: larger;">1: Draw a chart where the X axis is time and the Y axis is voltage. Draw 3 lines representing 
+    the voltage across an LED with analogWrite(led, 64), analogWrite(led, 128), and analogWrite(led,255).</b>
+    <img src="A2_Graph.jpg">
+    <p>
+      I couldn't figure out exactly how to show this as a graph in terms of my circuit so I used my graph to show each of
+      the analogWrite in terms of the time it is delayed for the red LED. I'm not sure if I am thinking about it correctly, 
+      but my understanding is that with a call of analogWrite(LED pin, 64) the LED will be on for 25% of the time it is 
+      delayed (6.25ms) and off for the remaining time. This time is too short for human eyes to see, so it looks like the 
+      LED is fading in and out due to the quick changes in on and off. 
+    </p>
+  <br>
+  <b style="font-size: larger;">2: Given your schematic, circuit, and firmware, assuming the only thing that draws current is 
+    your LEDs, how long would your circuit run if powered by a 1200 mAh battery?</b>
+    <p>
+      For my circuit, there are a few things happening that are needed to calculate how long it could run on a 1200mAh battery. 
+      The first is if the button is clicked, there is a fade of each color either in or out and when it is not clicked, each
+      of the red, blue, green LED is blinking every half a second. Addtionally, there is a resistor limiting the current to 20mA
+      or less. <br>
+      When the button is pressed, there is usually two LEDs on at once, either fading in or out. Because of this, I am going to
+      assume there is all power for a single LED to make it easier to calcuate the current (taking the same numbers of milliampere
+      as calcuated below). 
+      <br><br>When the ciruit blinks each light is fully on for that half a second and then off again, meaning when the blinking 
+      happens the current is also at it's highest point for each of the lights. With the 220Ω resistor for red and green LED, they 
+      are using <b style="font-family: Noto Sans Math; font-size: larger;">5V - 1.8V = 220Ω &times; A ---> A = 0.01454 
+        ---> 14.54mA.</b>
+        With the 100Ω resistor for the blue LED, it is using <b style="font-family: Noto Sans Math; 
+        font-size: larger;">5V - 3.3V = 100Ω &times; A ---> A = 0.017 ---> 17mA.</b>
+        <br><br>To find the length of time this circut can run on a 1200mAh battery, I am going to take the assumption that 
+        the fade and the blink will happen each half the time. With this, I only need to divide milliampere per hour by 
+        milliamperes of current. <b style="font-family: Noto Sans Math; font-size: larger;"> Runtime = 1200mAh / ((17mA + 14.54mA)/2) = 76h.</b>
+        I averaged the two currents for red, green, and blue to make it easier to calcuate. So 76 hours is an estimate of the 
+        actual runtime on a 1200mAh battery with fading and blinking happening each 50% of the time.
+      </p>
   </body>
 </html>
