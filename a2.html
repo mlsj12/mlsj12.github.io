@@ -174,35 +174,35 @@ void setup() {
   <b style="font-size: larger;">1: Draw a chart where the X axis is time and the Y axis is voltage. Draw 3 lines representing 
     the voltage across an LED with analogWrite(led, 64), analogWrite(led, 128), and analogWrite(led,255).</b>
     <img src="A2_Graph.jpg">
-    <p>
-      I couldn't figure out exactly how to show this as a graph in terms of my circuit so I used my graph to show each of
-      the analogWrite in terms of the time it is delayed for the red LED. I'm not sure if I am thinking about it correctly, 
-      but my understanding is that with a call of analogWrite(LED pin, 64) the LED will be on for 25% of the time it is 
-      delayed (6.25ms) and off for the remaining time. This time is too short for human eyes to see, so it looks like the 
-      LED is fading in and out due to the quick changes in on and off. 
-    </p>
-  <br>
-  <b style="font-size: larger;">2: Given your schematic, circuit, and firmware, assuming the only thing that draws current is 
-    your LEDs, how long would your circuit run if powered by a 1200 mAh battery?</b>
-    <p>
-      For my circuit, there are a few things happening that are needed to calculate how long it could run on a 1200mAh battery. 
-      The first is if the button is clicked, there is a fade of each color either in or out and when it is not clicked, each
-      of the red, blue, green LED is blinking every half a second. Addtionally, there is a resistor limiting the current to 20mA
-      or less. <br>
-      When the button is pressed, there is usually two LEDs on at once, either fading in or out. Because of this, I am going to
-      assume there is all power for a single LED to make it easier to calcuate the current (taking the same numbers of milliampere
-      as calcuated below). 
-      <br><br>When the ciruit blinks each light is fully on for that half a second and then off again, meaning when the blinking 
-      happens the current is also at it's highest point for each of the lights. With the 220Ω resistor for red and green LED, they 
-      are using <b style="font-family: Noto Sans Math; font-size: larger;">5V - 1.8V = 220Ω &times; A ---> A = 0.01454 
-        ---> 14.54mA.</b>
-        With the 100Ω resistor for the blue LED, it is using <b style="font-family: Noto Sans Math; 
-        font-size: larger;">5V - 3.3V = 100Ω &times; A ---> A = 0.017 ---> 17mA.</b>
-        <br><br>To find the length of time this circut can run on a 1200mAh battery, I am going to take the assumption that 
-        the fade and the blink will happen each half the time. With this, I only need to divide milliampere per hour by 
-        milliamperes of current. <b style="font-family: Noto Sans Math; font-size: larger;"> Runtime = 1200mAh / ((17mA + 14.54mA)/2) = 76h.</b>
-        I averaged the two currents for red, green, and blue to make it easier to calcuate. So 76 hours is an estimate of the 
-        actual runtime on a 1200mAh battery with fading and blinking happening each 50% of the time.
-      </p>
-  </body>
+   <p>
+     I couldn't figure out exactly how to show this as a graph in terms of my circuit so I used my graph to show each of
+     the analogWrite in terms of the time it is delayed for the red LED. I'm not sure if I am thinking about it correctly,
+     but my understanding is that with a call of analogWrite(LED pin, 64) the LED will be on for 25% of the time it is
+     delayed (6.25ms) and off for the remaining time. This time is too short for human eyes to see, so it looks like the
+     LED is fading in and out due to the quick changes in and off.
+   </p>
+ <br>
+ <b style="font-size: larger;">2: Given your schematic, circuit, and firmware, assuming the only thing that draws current is
+   your LEDs, how long would your circuit run if powered by a 1200 mAh battery?</b>
+   <p>
+     For my circuit, there are a few things happening that are needed to calculate how long it could run on a 1200mAh battery.
+     The first is if the button is clicked, there is a fade of each color either in or out and when it is not clicked, each
+     of the red, blue, green LED is blinking every half a second. Additionally, there is a resistor limiting the current to 20mA
+     or less. <br>
+     When the button is pressed, there are usually two LEDs on at once, either fading in or out. Because of this, I am going to
+     assume there is all power for a single LED to make it easier to calculate the current (taking the same numbers of milliampere
+     as calculated below).
+     <br><br>When the circuit blinks each light is fully on for that half a second and then off again, meaning when the blinking
+     happens the current is also at its highest point for each of the lights. With the 220Ω resistor for red and green LED, they
+     are using <b style="font-family: Noto Sans Math; font-size: larger;">5V - 1.8V = 220Ω &times; A ---> A = 0.01454
+       ---> 14.54mA.</b>
+       With the 100Ω resistor for the blue LED, it is using <b style="font-family: Noto Sans Math;
+       font-size: larger;">5V - 3.3V = 100Ω &times; A ---> A = 0.017 ---> 17mA.</b>
+       <br><br>To find the length of time this circuit can run on a 1200mAh battery, I am going to take the assumption that
+       the fade and the blink will happen each half the time. With this, I only need to divide milliampere per hour by
+       milliamperes of current. <b style="font-family: Noto Sans Math; font-size: larger;"> Runtime = 1200mAh / ((17mA + 14.54mA)/2) = 76h.</b>
+       I averaged the two currents for red, green, and blue to make it easier to calculate. So 76 hours is an estimate of the
+       actual runtime on a 1200mAh battery with fading and blinking happening each 50% of the time.
+     </p>
+ </body>
 </html>
