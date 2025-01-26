@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Mai Li's HCDE 439 Physical Computing Page!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Mai Li's Assignment 3!</h1>
+    <div class="header" style="margin-top: 2%;">
+      <img src="a3_schematic.JPG" alt="Page of grid paper of button schematic with a photoresistor, 10K Ω resistor, red LED 
+      with 220 Ω resistor, blue LED with 100 Ω resistor, and green LED with 220 Ω resistor." style="width: 50%;"/>
+      <div class="text">
+        <h2>Schematic Explanation:</h2>
+        <p>
+          Similar to previous assignments, I started by understanding the requirements of the circuit I need to build. I wrote
+          out what was needed and then drew out the schematic of each independent circuit. 
+          For this assignment, I needed to include a sensor and I chose the photoresistor because it was a sunny day outside! I 
+          also used the RGB LED because I initially wanted to use the colors of the rainbow depending on how much light was being
+          detected (such as blue for darkness and yellow for brightness). However, as I went through the rest of the requirements,
+          I decided not to do this route. 
+          Since I used three LED and a controlling unit for the lights, I used a common ground, placing each of the negative sides
+          into the blue negative connected port on the breadboard, using an additional wire to the ground on the Arduino. This makes
+          it easier to see on the Arduino what is connected and also clearer because there are only a few grounding pins.   
+        </p>
+      </div>
+    </div>
+    <figcaption>A3: Input/Output! Write up. Calculations are by each resistor and below as well.</figcaption>
+    <h2 style="margin-bottom: 10px;"">Calculations</h2>
+    <div class="header">
+      <p style="font-family: Noto Sans Math; font-size: larger; margin-bottom: 0%;">
+        <b>The red & green LED both have 1.8V drop:</b><br>
+        5V - 1.8V = 20mA &times; R ---> <b>R = 160Ω+</b>
+      </p>
+      <p style="font-family: Noto Sans Math; font-size: larger; margin-bottom: 0%; margin-left: 200px;">
+        <b>The blue LED has 3.3V drop:</b><br>
+        5V - 3.3V = 20mA &times; R ---> <b>R = 85Ω+</b>
+      </p>
+    </div>
+    <p>
+        These resistance calculations show the <b>minimum</b> required resistance to maintain a 20mA current. I don't have 
+        specifically those Ohms resistors, so I used higher resistance for each of the LEDs.  For red and green, I used the 
+        220Ω resistor and for blue I used a 100Ω resistor. 
+    </p>
+    <br>
+    <p style="margin-bottom: 0%">
+      <b>Photoresistor circuit:</b>As discussed in class, these controlling circuits will use a 10KΩ resistor because it 
+      guarantees a very limited current. If we used a battery to power this entire circuit, we want as much power to the LEDs, 
+      showing the light rather than the controlling unit. The photoresistor will still work as it's supposed to with a higher 
+      resistance. 
+    </p>
+    <div class="header">
+      <div class="text">
+        <h2 style="margin-top: 5%;">Circuit Explanation:</h2>
+        <p>
+            After thinking about what I wanted to try out with the code, I started building my ciruit. Since I was using the
+            RGB LED, I color coded the wires to the color each LED was to the prongs on the single LED. To make sure the LEDs
+            were connected correctly, I plugged in the Arduino and tried each of the LEDs to the 5V pin (all the LEDs lit up).
+            <br><br>
+            As I started coding, I realized I needed to use the map function, something I hadn't used before. I used the 
+            Serial.print/println to see how it worked. After understanding how it worked, I decided to not use my original plan. 
+            The map function takes the input of the photoresistor which is a brightness number between 0 and 1023 and puts it 
+            into a number between 0 and 255. This number can be used to analogWrite an LED, which uses the number to turn it on
+            and off in relation to each other. 
+            <br><br>
+            Instead, I used this mapped number to turn on all the LEDs at the same level of brightness the photoresistor picked
+            up. I also had a limit of how much brightness could turn on the LEDs. Using the Serial.print, I figured out the 
+            brightness was between 153 and 203 out of 255. With this, I decided my limit was 200; if the brightness is less 
+            than 200, the LEDs will turn on and adjust their brightness to how much light is in the room. 
+
+        </p>
+      </div>
+      <img src="a3_circuit.JPG" alt="A bread board with colorful wires coming out to connect an RGB LED and a photoresistor
+      to the Arduino." style="margin-top: 5%;">
+    </div>
+    <p style="text-align: right;">A3: Input/Output! circuit photo</p>
+    <div class="header" style="margin-top: 2%;">
+      <div class="text">
+        <h2>Gif:</h2>
+        <img src="a3_gif.gif" alt="Gif of circuit working. It turns on when the brightness is less than 200 and maps to the 
+        brightness that is outside." style="width: 50%;"/>
+      </div class="text">
+      </div>
+    </div>
+    <figcaption>A3: Input/Output! gif of circuit turning on when the brightness is low enough. (If you look close enough
+        the LED pulses a little, changing the brightness as the outside brightness changes, which is determined by how 
+        close my finger is to the resistor.)</figcaption>
+    <h2>Code</h2>
+    <pre><code>
+// HCDE 439
+// Mai Li Jorgensen
+// A3: Input/Output!
+
+void setup() {
+    // set up each of the LED pins as outputs
+    pinMode(5, OUTPUT);
+    pinMode(6, OUTPUT);
+    pinMode(9, OUTPUT);
+    // photoresistor doesn't need it as it's already set in an analog pin
+    // begin series at data rate in bits per second as defined in the bottom of the screen
+    Serial.begin(9600);
+}
+void loop() {
+    // grab the number of brightness between 0 and 1023
+    int brightness = analogRead(A0);
+    // serial print the brightness picked up by the photoresistor
+    Serial.print("sensor = ");
+    Serial.print(brightness);
+    // lowest I got was ~ 669, highest ~ 815
+    // map the 0-1023(photoresistor brightness scale) to 0-255(LED brightness scale)
+    int output = map(brightness, 0, 1023, 0, 255);
+    // serial print the mapped LED brightness
+    Serial.print("output = ");
+    Serial.println(output);
+    // lowest I got was ~ 153, highest ~ 203
+    // if the brightness is low (lower than 200), turn on the RGB LED (all) at the output brightness
+    if (output < 200) {
+        // turn on red
+        analogWrite(5, output);
+        // turn on green
+        analogWrite(6, output);
+        // turn on blue
+        analogWrite(9, output);
+    }
+    else {
+        // turn off red
+        digitalWrite(5, LOW);
+        // turn off green
+        digitalWrite(6, LOW);
+        // turn off blue
+        digitalWrite(9, LOW);
+    }
+}
+</code></pre>  
+    <h2 style="margin-top: 5%;">Additional Questions:</h2>
+  <b style="font-size: larger;">1: In your voltage divider, can the variable resistor be either R1 or R2 or does it need to be 
+    one or the other? Justify your answer with example calculations.</b>
+   <p>
+    While the variable resistor can be placed first or second, it is better for it to be at R1. As shown below, treating the
+    photoresistor as the first resistor, has more output volts than when it's used as R2. With less usage of volts, the longer
+    the photoresistor can run for and give more charge to the LEDs. 
+    <br><br>I measured the resistance from the photoresistor and got around 1.56Ω.
+    <p style = "font-family: Noto Sans Math; font-size: larger;">
+        <b>Photoresistor = R1:</b><br>
+        V<sub>out</sub> = 5V &times; <sup>10KΩ</sup>/<sub>10KΩ + 1.56KΩ</sub><br>
+        V<sub>out</sub> = 4.325V  (More volts, maintaining the battery longer.)
+        <br>
+        <b>Photoresistor = R2:</b><br>
+        V<sub>out</sub> = 5V &times; <sup>1.56KΩ</sup>/<sub>10KΩ + 1.56KΩ</sub><br>
+        V<sub>out</sub> = 0.675V
+    </p>
+    </p> 
+   </p>
+ <br>
+ <b style="font-size: larger;">2: Draw a graph where the x-axis is time and the y-axis is voltage. Plot the voltage at 
+    V-measure of your voltage divider of your shared gif.</b>
+    <img src="a3_graph.jpg">
+   <p>
+    I measured the voltage when there was as much light as possible and as little light as possible. As seen in the photo, I 
+    got around 1.61V when there wasn't much light, and less than 1V when there was light. Using this information, I then used
+    my video to understand when there was darkness and light. Mapping the light and dark to the 10-sec video, I drew out the 
+    voltage for the divider. 
+    <br><b>Disclaimer:</b> These numbers may not be completely accurate. I videoed on Saturday morning and measured the voltage on 
+    Sunday afternoon due to appointments that interupted working on this homework. I am guessing the difference in light at 
+    these times probably changed the voltage reading a little.   
+    </p>
+<br>
+<b style="font-size: larger;">3: AnalogWrite and analogRead are respectively 8-bit and 10-bit values. Imagine you had 10-bit 
+    PWM and a 16-bit analog-to-digital converter instead. How would this change your map() code? Explain your answer.</b>
+    <p>
+        Having a higher bit value for each analogWrite and analogRead means the numbers used are different the PWM (LED fading 
+        uses this) would be out of 1023 and the input (photoresistor scale) would be out of 65535. These larger numbers means
+        there are more smaller steps of brightness and PWM for the resistor and LED to be at. This would  make the fade of an 
+        LED less noticable (smoother transitions of the on/off percentage) due to increased amount of steps; there is 
+        less of a change between 0 and 1 out of 1023 and 65535
+        than there is from an 8 and 10-bit sequence. The map() code would change since the ranges increases, making each
+        of the input and output number scale differently to each other.  
+    </p>
+ </body>
+</html>
