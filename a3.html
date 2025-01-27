@@ -21,7 +21,8 @@
           For this assignment, I needed to include a sensor and I chose the photoresistor because it was a sunny day outside! I 
           also used the RGB LED because I initially wanted to use the colors of the rainbow depending on how much light was being
           detected (such as blue for darkness and yellow for brightness). However, as I went through the rest of the requirements,
-          I decided not to do this route. 
+          I decided not to go down this route. 
+          <br><br>
           Since I used three LED and a controlling unit for the lights, I used a common ground, placing each of the negative sides
           into the blue negative connected port on the breadboard, using an additional wire to the ground on the Arduino. This makes
           it easier to see on the Arduino what is connected and also clearer because there are only a few grounding pins.   
@@ -47,10 +48,10 @@
     </p>
     <br>
     <p style="margin-bottom: 0%">
-      <b>Photoresistor circuit:</b>As discussed in class, these controlling circuits will use a 10KΩ resistor because it 
+      <b>Photoresistor circuit:</b> As discussed in class, these controlling circuits will use a 10KΩ resistor because it 
       guarantees a very limited current. If we used a battery to power this entire circuit, we want as much power to the LEDs, 
-      showing the light rather than the controlling unit. The photoresistor will still work as it's supposed to with a higher 
-      resistance. 
+      giving the most  light rather than powering the controlling unit. The photoresistor will still work as it's supposed to 
+      with a higher resistance. 
     </p>
     <div class="header">
       <div class="text">
@@ -61,15 +62,16 @@
             were connected correctly, I plugged in the Arduino and tried each of the LEDs to the 5V pin (all the LEDs lit up).
             <br><br>
             As I started coding, I realized I needed to use the map function, something I hadn't used before. I used the 
-            Serial.print/println to see how it worked. After understanding how it worked, I decided to not use my original plan. 
+            Serial.print/println to see how it worked. After understanding how it worked, I decided to not use my original plan
+            of fading colors together given what the brightness was. 
             The map function takes the input of the photoresistor which is a brightness number between 0 and 1023 and puts it 
-            into a number between 0 and 255. This number can be used to analogWrite an LED, which uses the number to turn it on
-            and off in relation to each other. 
+            into a number between 0 and 255, essentially making 255 100% instead of 1023. This number can be used to 
+            analogWrite an LED, which uses the number to turn it on and off in relation to each other. 
             <br><br>
             Instead, I used this mapped number to turn on all the LEDs at the same level of brightness the photoresistor picked
             up. I also had a limit of how much brightness could turn on the LEDs. Using the Serial.print, I figured out the 
             brightness was between 153 and 203 out of 255. With this, I decided my limit was 200; if the brightness is less 
-            than 200, the LEDs will turn on and adjust their brightness to how much light is in the room. 
+            than 200, the LEDs will turn on and adjust their brightness to how much light is surrounding the photoresistor. 
 
         </p>
       </div>
@@ -140,8 +142,8 @@ void loop() {
     one or the other? Justify your answer with example calculations.</b>
    <p>
     While the variable resistor can be placed first or second, it is better for it to be at R1. As shown below, treating the
-    photoresistor as the first resistor, has more output volts than when it's used as R2. With less usage of volts, the longer
-    the photoresistor can run for and give more charge to the LEDs. 
+    photoresistor as the first resistor, has more output volts than when it's used as R2. With more output volts, (position R1)
+    the longer the photoresistor can run for and give more charge to the LEDs. 
     <br><br>I measured the resistance from the photoresistor and got around 1.56Ω.
     <p style = "font-family: Noto Sans Math; font-size: larger;">
         <b>Photoresistor = R1:</b><br>
