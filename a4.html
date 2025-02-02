@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Mai Li's HCDE 439 Assignment 4!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Mai Li's Assignment 4!</h1>
+    <h2>Overview:</h2>
+    <p>
+        Unlike the past assignments, I didn't linearly go through the steps. In class, we just don't have time to go through
+        everything that uses libraries that are in the Arduino kit. I first wrote out the requirements, already having an
+        idea of what I wanted to use: the membrane keypad and a single 7-digit display; however I didn't know how or even 
+        if it was possible to connect the two. 
+        <br>
+        Knowing what I wanted, I first took some advice I got in class: <b>understand the two items separately, before putting
+        them together</b>. I searched through Youtube to try to find some introduction videos on the keypad and the display.
+        I found a man that was really good at explaining the keypad, hooking it to a LCD. I didn't want to hook it
+        up to a light crystal display, so I went looking for an explaination on how to set up a 7-digit display as well. I 
+        found the same guy talking about this item too and started learning!
+        <br>
+        <b>Membrane Keypad Video: </b><a href="https://www.youtube.com/watch?v=vl1-R6NsejM">https://www.youtube.com/watch?v=vl1-R6NsejM</a>
+        <br>
+        <b>7-Digit Display Video: </b><a href="https://www.youtube.com/watch?v=6XY9PooMrms">https://www.youtube.com/watch?v=6XY9PooMrms</a>
+        <br>
+        After, I felt a little disappointed because both these items use 7 or 8 pins on the Arduino, but I only have 14 
+        digital pins. I wondered if I could use some of the anaglog in pins for the keypad, but I didn't want to try it 
+        before some more research into it. I searched for a while, looking at StackExchange and other web forums, such as the 
+        <a href="https://electronics.stackexchange.com/questions/660920/can-i-capture-keypad-values-with-an-analog-pin">Arduino Forum</a>.
+        <br>
+        This is when I found someone doing exactly what I wanted and I watched him using three of the A_ pins for the display.
+        I didn't like the entire video and I used a combination of the resources linked above to create this circuit. 
+        <br>
+        <b>Membrane Keypad + 7-Digit Display Video: </b><a href="https://www.youtube.com/watch?v=HjBOjK1H9vM">https://www.youtube.com/watch?v=HjBOjK1H9vM</a>
+    </p>
+    <div class="header" style="margin-top: 2%;">
+      <img src="a4_photo.JPG" alt="Page of grid paper of a membrane keypad schematic, rows and columns are connected to 
+      pins 2 - 9. A schematic of a single 7-digit a-g are connected to pins 10-13 and A0-A2. The common is connected to a 1kΩ 
+      resistor before the ground." style="width: 50%;"/>
+      <div class="text">
+        <h2>Circuit Explanation:</h2>
+        <p>
+          After looking at videos and resources, I wanted to draw the schematic first, but I didn't know how it would look
+          when I was done with, so I came back to the drawing afterwards. I wanted to see the whole circuit laid out on
+          the breadboard and visualize what information I had in real life and play with the circuit. 
+          <br><br>
+          Still wanting to figure out the two items seperately, I first attempted the keyboard and had it print to the serial
+          monitor, following the video above for the item. Before I followed
+          the video exactly, I did some digging into why there was no resistors. I found out that some people had used 
+          resistors on all 8 of the rows and columns but it wasn't working. Someone else had said that they only needed 
+          resistors on either all rows or all columns but not both. This made sense because how the video explained the keypad
+          working the rows and columns become one circuit and two resistors may be too much resistance. Then I also saw that 
+          others were saying no resistors were needed because the keypad had its own pull-up resistors. 
+          So I followed the video and attached the rows and columns to pins 2-9 without resistance. 
+          <br><br>
+          For the digit display, I also wanted to see it work by itself, but as I watched the video putting the keypad and this
+          together, the code and the placement of wires is different. I decided to follow the video. Four of the digits are 
+          connected to pins 10 - 13 and the other three (I opted out of using the decimal point), are attached to analog in.
+        </p>
+      </div>
+    </div>
+    <figcaption>A4: Libraries! circuit photo. Resistance amount is explained below.</figcaption>
+    <h2 style="margin-bottom: 10px;">Resistance Use</h2>
+    <div class="header">
+        <p>
+            As I mentioned above, I didn't use any resistance for the keypad because I got conflicting messages and what I 
+            should do. In the end, I decided to follow the video that was more helpful and I could actually see what happened
+            with the circuit. The other resources I looked at didn't have videos for me to visually understand what was 
+            happening with the different connections of resistance. 
+            <br>
+            For the display, I first added a 10KΩ resistor before the ground because I thought it was the same as the button 
+            or the photoresistor. I wasn't sure exactly what the resistance would do in this circuit. I went through this, coding,
+            and trying it out, but realized that the brightness of the display was very low even if I manually set it to a higher
+            brightness level. I then thought, maybe the resistor is doing something, and I traded it out for a 1KΩ. This 
+            fixed the dim digits and I retook the video and started on the schematic. 
+        </p>
+    </div>
+    <h2>Gif and Code Explanation:</h2>
+    <p>
+        Since I didn't know how these items worked, I also didn't know the functions they have either, which is why I also
+        followed the videos to come up with the code used. I didn't write all of it myself, but I did change parts of it
+        when it wouldn't work since I was using the 7-digit display with the keypad. 
+        <br>
+        I also treated as learning exercise, adding comments when I wasn't sure what it would do and then going back to change 
+        the comment when I figured out what it was. 
+    </p>
+    <img src="a4_gif.gif" alt="A gif of a 4x4 membrane keypad on the left being pressed as the numbers change on a 
+      7-digit display to the right;">
+    <p>A4: Libraries! gif showing the numbers pressed and changed display for each.</p>
+    <pre><code>
+// Mai Li Jorgensen
+// HCDE 439
+// A4: Libraries!
+
+// add the library for the keypad
+#include < Keypad.h >
+// add the seven digit library
+#include "SevSeg.h"
+
+// add the rows and column numbers for the keypad
+const byte row = 4;
+const byte column = 4;
+
+// make an array that codes to the buttons on the keypad
+// the inputs will be strings?
+// the outputs will be the string
+char keys[row][column] = {
+ {'1', '2', '3', 'A'},
+ {'4', '5', '6', 'B'},
+ {'7', '8', '9', 'C'},
+ {'*', '0', '#', 'D'}
+};
+
+// array for the pin connections for each row and column
+byte rowPins[row] = {9, 8, 7, 6};
+byte columnPins[column] = {5, 4, 3, 2};
+
+// make the keypad from the library
+// passes in the array of button outputs, the pins each row & column are connected to, and the amount of rows and columns 
+// (basically everything defined above)
+Keypad customKeypad = Keypad(makeKeymap(keys), rowPins, columnPins, row, column);
+
+// create a sevseg object for the display
+SevSeg sevseg;
+
+// number of digits used, this is a single one
+byte digit = 1;
+
+// which display is used (only used when there is more than one digit)
+// but I still need to define it?
+byte digitPin = {};
+
+// which pins are connected to each of the digits
+// order: A, B, C, D, E, F, G, DP (didn't connect a wire for DP)
+byte segmentPins[] = {11, 10, A2, A1, A0, 12, 13};
+
+// what display is it
+byte configure = COMMON_CATHODE;
+
+// initialize the number passed to the display  
+int num = 0;
+
+void setup() {
+    // add the serial monitor to see the output on the screen
+    // add the pins for the display as outputs
+    Serial.begin(9600);
+    pinMode(11, OUTPUT);
+    pinMode(10, OUTPUT);
+    pinMode(A0, OUTPUT);
+    pinMode(A1, OUTPUT);
+    pinMode(A2, OUTPUT);
+    pinMode(12, OUTPUT);
+    pinMode(13, OUTPUT);
+    // start the display with everything defined for it above
+    sevseg.begin(configure, digit, digitPin, segmentPins, 1);
+    // added brightness when screen was really low
+    sevseg.setBrightness(90);
+}
+
+void loop() {
+    // save the value when a button is pressed using the defined values
+    char key = customKeypad.getKey();
+    // change the character to an number for the output
+    num = (key - '0');
+    
+    // does the key exist? if it does print in the serial monitor
+    if (key) {
+        Serial.println(key);
+        // add the number to the display and refresh, print it out again with the new number
+        sevseg.setNumber(num);
+        sevseg.refreshDisplay();
+        delay(50);
+    }
+}
+    </code></pre>
+    <div class="header" style="margin-top: 2%;">
+        <img src="a4_schemtic.JPG" alt="Page of grid paper with a 4x4 membrane keypad schematice connected to pins 2-9. Below
+        it has a schematic of a single 7-digit display connected to pins 10-13 and A0-A2. The common pin is connected to a 
+        1KΩ resistor before going to ground." style="width: 50%;"/>
+        <div class="text">
+          <h2>Schematic Explanation:</h2>
+          <p>
+            As mentioned before, I did not do this linearly and drew the schematic after everything to make sure I understood
+            the connections and figured out the two items, and libraries associated with them, out. My schematic shows the 
+            4x4 membrane keypad drawn out as switches in an array pattern. As a button is pressed, a single switch as the 
+            junction of the row and column is turned on. This is information is then sent to the Arduino to be coded into 
+            which button was just pressed. Since I had written out the buttons in an array in the code, the button is kept 
+            as a variable to be used.  
+            <br><br>
+            Next the single 7-digit display is connected to 7 different pins that can turn on each individual line in a 
+            figure-8. The library houses which line(s) should be turned on to create the desired number/letter output. So once
+            the key pressed is saved, if that key button is in the array, it will be turned into an integer to be displayed. I 
+            think the changing it from a character to an integer is why the letters, pound, and asterisk aren't working, but I 
+            didn't have enough time to figure out the exact reason why and fix it. 
+          </p>
+        </div>
+      </div>
+    
+
+
+    <h2 style="margin-top: 5%;">Additional Questions:</h2>
+  <b style="font-size: larger;">1: Say you are using a servo motor you attach to pin 9. Draw a graph with the X axis in 
+    seconds, for two seconds, and the y-axis the voltage at pin 9 with respect to ground. In your loop() you have the following 
+    code:</b> 
+    <pre style="margin: 0%;"><code>
+    for (int i=0, i<180, i++) {
+        servo.write(i); 
+        delay(100);
+    } 
+    </code></pre>
+    <img src="a4_graph.png">
+    <p>
+      I tired to logic my way through this question, but I didn't quite understand, in the time frame, how 5V and 0V jumped
+      up and down. Instead, I used my multi-meter to measure between 9V and ground in the circuit. I first tried to build
+      it just to see if visualizing it would help, but it didn't. <br>
+      What I saw on the multi-meter was that in the first 2 seconds of the loop, the volts never reached above 1V but didn't 
+      decrease either. I don't think it was as linear as my graph, but 2 seconds is really quick and I couldn't totally 
+      diecipher what volts were occuring in the time frame. The graph is my best estimate. 
+    </p>
+ <br>
+ <b style="font-size: larger;">2: Your input device is slightly broken, leading it to give us an erroneous reading 1% of the 
+    time. How can we address this? Answer in (pseudo)code.</b>
+    <p>
+        The membrane keypad handles these errors differently than other kinds of sensors. It can read a button press when
+        there isn't one hit or it can not detect a press when there is a button pressed. To be accurate, the best way would
+        be to get multiple actual presses before accepting the button.
+<pre><code>
+    wait_time = 50ms
+    WHILE true (arbitrary time frame)
+        IF button == PRESSED 
+            button_state = True 
+            PAUSE wait_time
+            IF button == PRESSED (still)
+                button_state = True 
+                CONTINUE with button pressed
+</code></pre>
+    </p>
+<br>
+<b style="font-size: larger;">3: Your input device is slightly noisy, leading the measurement to randomly deviate from the 
+    true measurement up or down by 10%. How can we address this? Answer in (pseudo)code.</b>
+    <p>Again, the membrane keypad doesn't generally have a bunch of noise, but can be faulty due to wiring. So waiting longer
+        periods of time to see if the button is still pressed may help calibrate the keypad before use. As well as adding 
+        amount of times it must be successful before it proceeds. 
+<pre><code>
+    wait_time = 50ms
+    WHILE true (arbitrary time frame - maybe five times success is achieved in a row)
+        IF button == PRESSED 
+            button_state = True 
+            PAUSE wait_time
+            IF key == PRESSED (still)
+                key_state = True 
+            ELSE 
+                key_state = False
+        IF key_state = True
+            RETURN to WHILE loop
+            success = +1
+        ELSE
+            END (restart) 
+        IF success = 5
+            CONTINUE to program
+</code></pre>
+    </p>
+ </body>
+</html>
