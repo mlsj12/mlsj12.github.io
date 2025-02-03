@@ -30,10 +30,14 @@
         After, I felt a little disappointed because both these items use 7 or 8 pins on the Arduino, but I only have 14 
         digital pins. I wondered if I could use some of the anaglog in pins for the keypad, but I didn't want to try it 
         before some more research into it. I searched for a while, looking at StackExchange and other web forums, such as the 
-        <a href="https://electronics.stackexchange.com/questions/660920/can-i-capture-keypad-values-with-an-analog-pin">Arduino Forum</a>.
+        <a href="https://forum.arduino.cc/t/membrane-keypad-and-seven-segment-display/652780">Arduino Forum</a>.
         <br>
-        This is when I found someone doing exactly what I wanted and I watched him using three of the A_ pins for the display.
-        I didn't like the entire video and I used a combination of the resources linked above to create this circuit. 
+        This is when I found someone doing exactly what I wanted and I watched him using three of the analog pins for the display.
+        I didn't like the entire video and I used a combination of the resources linked above to create this circuit. I also tried
+        reversing the pins; the keypad has the three extra analog input pins. I did this because the keypad is the input for the 
+        circuit, so I thought it would make more sense that they could use the analog-in pins. However, changing the code and 
+        the pins didn't light up the display or even print in the serial monitor, so I went back to the display using the 
+        analog pins.
         <br>
         <b>Membrane Keypad + 7-Digit Display Video: </b><a href="https://www.youtube.com/watch?v=HjBOjK1H9vM">https://www.youtube.com/watch?v=HjBOjK1H9vM</a>
     </p>
@@ -49,8 +53,8 @@
           the breadboard and visualize what information I had in real life and play with the circuit. 
           <br><br>
           Still wanting to figure out the two items seperately, I first attempted the keyboard and had it print to the serial
-          monitor, following the video above for the item. Before I followed
-          the video exactly, I did some digging into why there was no resistors. I found out that some people had used 
+          monitor, following the video above for the item. Before I followed the video exactly, I did some digging into why 
+          there was no resistors in the video. I found out that some people had used 
           resistors on all 8 of the rows and columns but it wasn't working. Someone else had said that they only needed 
           resistors on either all rows or all columns but not both. This made sense because how the video explained the keypad
           working the rows and columns become one circuit and two resistors may be too much resistance. Then I also saw that 
@@ -69,13 +73,14 @@
         <p>
             As I mentioned above, I didn't use any resistance for the keypad because I got conflicting messages and what I 
             should do. In the end, I decided to follow the video that was more helpful and I could actually see what happened
-            with the circuit. The other resources I looked at didn't have videos for me to visually understand what was 
-            happening with the different connections of resistance. 
+            with the circuit without resistance. The other resources I looked at didn't have videos for me to visually understand what was 
+            happening with the different ways of adding resistance. 
             <br>
             For the display, I first added a 10KΩ resistor before the ground because I thought it was the same as the button 
             or the photoresistor. I wasn't sure exactly what the resistance would do in this circuit. I went through this, coding,
             and trying it out, but realized that the brightness of the display was very low even if I manually set it to a higher
-            brightness level. I then thought, maybe the resistor is doing something, and I traded it out for a 1KΩ. This 
+            brightness level. I then thought, maybe the resistor is doing something to inhibit the lights in the display, 
+            and I traded it out for a 1KΩ. This 
             fixed the dim digits and I retook the video and started on the schematic. 
         </p>
     </div>
@@ -186,22 +191,21 @@ void loop() {
           <p>
             As mentioned before, I did not do this linearly and drew the schematic after everything to make sure I understood
             the connections and figured out the two items, and libraries associated with them, out. My schematic shows the 
-            4x4 membrane keypad drawn out as switches in an array pattern. As a button is pressed, a single switch as the 
+            4x4 membrane keypad drawn out as switches in an array pattern. As a button is pressed, a single switch at the 
             junction of the row and column is turned on. This is information is then sent to the Arduino to be coded into 
-            which button was just pressed. Since I had written out the buttons in an array in the code, the button is kept 
-            as a variable to be used.  
+            which button was just pressed. Since I had written out the buttons in an array in the code above, the button is kept 
+            as a variable to be used with the display.  
             <br><br>
             Next the single 7-digit display is connected to 7 different pins that can turn on each individual line in a 
             figure-8. The library houses which line(s) should be turned on to create the desired number/letter output. So once
             the key pressed is saved, if that key button is in the array, it will be turned into an integer to be displayed. I 
-            think the changing it from a character to an integer is why the letters, pound, and asterisk aren't working, but I 
-            didn't have enough time to figure out the exact reason why and fix it. 
+            think the changing it from a character to an integer is why the letters, pound, and asterisk aren't working. 
+            Whenever I clicked them, only the center line would illuminate which is why I didn't include it in the gif.  I 
+            didn't have enough time to figure out the exact reason why and fix it before the assignment was due.
+            * When I have more time, I will try to figure it out and update this site! 
           </p>
         </div>
       </div>
-    
-
-
     <h2 style="margin-top: 5%;">Additional Questions:</h2>
   <b style="font-size: larger;">1: Say you are using a servo motor you attach to pin 9. Draw a graph with the X axis in 
     seconds, for two seconds, and the y-axis the voltage at pin 9 with respect to ground. In your loop() you have the following 
@@ -215,11 +219,11 @@ void loop() {
     <img src="a4_graph.png">
     <p>
       I tired to logic my way through this question, but I didn't quite understand, in the time frame, how 5V and 0V jumped
-      up and down. Instead, I used my multi-meter to measure between 9V and ground in the circuit. I first tried to build
-      it just to see if visualizing it would help, but it didn't. <br>
+      up and down. Instead, I used my multi-meter to measure between pin 9 and ground in the circuit. I first tried to build
+      it just to see if visualizing what the servo would do with the code, but it didn't help me understand it completely. <br>
       What I saw on the multi-meter was that in the first 2 seconds of the loop, the volts never reached above 1V but didn't 
       decrease either. I don't think it was as linear as my graph, but 2 seconds is really quick and I couldn't totally 
-      diecipher what volts were occuring in the time frame. The graph is my best estimate. 
+      diecipher what amount of volts were occuring in the time frame. The graph is my best estimate. 
     </p>
  <br>
  <b style="font-size: larger;">2: Your input device is slightly broken, leading it to give us an erroneous reading 1% of the 
@@ -227,39 +231,42 @@ void loop() {
     <p>
         The membrane keypad handles these errors differently than other kinds of sensors. It can read a button press when
         there isn't one hit or it can not detect a press when there is a button pressed. To be accurate, the best way would
-        be to get multiple actual presses before accepting the button.
+        be to get multiple comfirmations that a button was pressed before continuing.
 <pre><code>
     wait_time = 50ms
     WHILE true (arbitrary time frame)
-        IF button == PRESSED 
+        IF button1 == PRESSED 
             button_state = True 
             PAUSE wait_time
-            IF button == PRESSED (still)
+            IF button2 == PRESSED (still)
+              IF button2 == button 1
                 button_state = True 
-                CONTINUE with button pressed
+                CONTINUE with button pressed action
 </code></pre>
     </p>
 <br>
 <b style="font-size: larger;">3: Your input device is slightly noisy, leading the measurement to randomly deviate from the 
     true measurement up or down by 10%. How can we address this? Answer in (pseudo)code.</b>
-    <p>Again, the membrane keypad doesn't generally have a bunch of noise, but can be faulty due to wiring. So waiting longer
-        periods of time to see if the button is still pressed may help calibrate the keypad before use. As well as adding 
-        amount of times it must be successful before it proceeds. 
+    <p>
+      Again, the membrane keypad doesn't generally have a bunch of noise, but can be faulty due to wiring. So waiting longer
+      periods of time to see if the button is still pressed may help calibrate the keypad before use. As well as adding 
+      amount of times it must be successful before it proceeds. 
 <pre><code>
-    wait_time = 50ms
+    wait_time = 75ms
     WHILE true (arbitrary time frame - maybe five times success is achieved in a row)
-        IF button == PRESSED 
-            button_state = True 
-            PAUSE wait_time
-            IF key == PRESSED (still)
-                key_state = True 
-            ELSE 
-                key_state = False
+        IF button1 == PRESSED 
+          button_state = True 
+          PAUSE wait_time
+          IF button2 == PRESSED (still)
+            IF button1 == button2
+              key_state = True 
+          ELSE 
+            key_state = False
         IF key_state = True
-            RETURN to WHILE loop
-            success = +1
+          success = +1
+          RETURN to WHILE loop
         ELSE
-            END (restart) 
+          END (restart) 
         IF success = 5
             CONTINUE to program
 </code></pre>
