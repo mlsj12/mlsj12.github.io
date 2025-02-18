@@ -41,12 +41,13 @@
       <img src="A5_schematic.JPG" alt="Page of grid paper with A5 requirements and schematic of the circuit described above." 
       style="width: 50%;"/>
       <div class="text">
-        <h2>Schematic Explanation:</h2>
+        <h2>First Schematic Explanation:</h2>
         <p>
           After getting confirmation I was thinking about this correctly, I drew out my schematic from the circuit I had 
           developed on the breadboard (I had some debugging to do and added a flyback diode to my circuit which is now also
           shown in the schematic). Some of my questions were about the amount of resistance needed in this circuit. I got 
-          back that motors generally don't need resistance and since the professor okayed my circuit photo, I went ahead. 
+          back that motors generally don't need resistance and since the professor okayed my circuit photo, I went ahead
+          without any. 
           <br><br>
           I didn't have all the right symbols to draw this so I looked up how an IRemote receiver looked like in a schematic 
           drawing and I got a couple different answers. I tried to find the exactly one we were using in class, but most I 
@@ -66,8 +67,8 @@
     <div class="header">
         <p>
             As I said above, I didn't use any resistance for either part of the circuit. I was following the IRemote demo
-            we had in class and I only put a resistor on the LED light we were trying to turn on and off. While following the 
-            LED light strip circuit with the MOSFET, there was also no resistor in that either. 
+            we had in class and I only put a resistor on the independent LED we were trying to turn on and off. 
+            While following the LED light strip circuit with the MOSFET, there was also no resistor in that either. 
             <br><br> 
             As part of my video watching for more information, I did note that many had used resistors, but didn't explain how
             they chose them, and I was worried if I picked the wrong one I would blow up my Arduino. 
@@ -80,7 +81,7 @@
         <img src="A5_photo.JPG" alt="Circuit photo with IRemote receiver a the top of the breadboard and the motor connected
         to external power in the bottom." style="width: 50%;"/>
         <div class="text">
-            <h2>Circuit:</h2>
+            <h2>First Motor Circuit:</h2>
             <p>
                 The circuit is a little more complex with wires because the sires soldered to my motor fell off and I didn't 
                 have time to go somewhere to resolder them. Instead I used alligator clips and additional wire connectors. 
@@ -92,13 +93,19 @@
 
     <div class="header">
         <div class="text">
-          <h2 style="margin-top: 5%;">Code Explanation:</h2>
+          <h2 style="margin-top: 2%;">Motor Code Explanation:</h2>
           <p>
-            I tested my motor, connected to only ground and it worked fine in both directions; however using the code to change
-            the motor speeds and on/off, the fan was very, very slow to start. For Speed 1 it didn't really move, but it would 
+            This is where it started to go wrong. As I implemented my code, the circuit wasn't outputting what I wanted.<br><br>
+            I tested my motor, connected to only ground and power and it worked fine in both directions; 
+            however using the code to change
+            the motor speeds and on/off, the fan was very, very slow to start. For Speed 1 it didn't move, but it would 
             output the correct comment and make clicking sound of the speed? For Speed 2 it would do a small burst every couple
             seconds with faster clicks and the right comment. For Speed 3, it would go fast for a bit and then stop and then go 
-            fast for a bit again, also with the comment correct. And for power, it would turn off correctly. 
+            fast for a bit again, also with the comment correct. And for power, it would turn off correctly. <br><br>
+
+            I was worried I had busted the motor with the 12V I attached to it, but attaching it to the Arduino power and 
+            ground, it still worked. I then had the idea of using the 9V battery, which also lead to the same results, even
+            with a flyback diode and capacitors.
           </p>
         </div>
       </div>
@@ -198,9 +205,12 @@ void loop() {
 </code></pre>
 <h2>A Complete Switch!</h2>
       <p>
-        After spending a lot more time on this circuit, I still couldn't figure out why the circuit wasn't working how I wanted.
+        After spending three days on this circuit and writing up everything I did except the output, I really didn't want to 
+        last-minute change, but I did. I still couldn't figure out why the circuit wasn't working how I wanted and I needed
+        to get something in.
         Either the motor never turned on or it made sounds but no motion was seen. I tried really hard to debug the code, the 
-        circuit, and the logic I was using to try to piece together everything. In the end, I decided that I had to get this 
+        circuit, and the logic I was using to try to piece together everything in my head out onto the breadboard. 
+        In the end, I decided that I had to get this 
         assignment in, even if that meant not doing my original plan of making a speed controlled fan for my brother. 
       </p>
 <div class="header" style="margin-top: 2%;">
@@ -210,17 +220,18 @@ void loop() {
       <h2>Schematic!</h2>
       <p>
         I didn't cut all losses and decided to take just the LED strip that worked in class and somewhat control it like the 
-        motor. So in my ACTUAL schematic, I only replaced the motor with the LED strip and got rid of the flyback diode as we
+        motor; using the PWM waves to control how bright or dim it is.
+        So in my ACTUAL schematic, I only replaced the motor with the LED strip and got rid of the flyback diode as we
         didn't use one in class.
       </p>
       <h2>Calculations!</h2>
       <p>
         With this new circuit, there is 5V going into the remote receiver and 12 into the LED strip. 
-        <br>
-        For the receiver, the current should be low below 20mA as it doesn't need a lot to run; however, I didn't use any 
+        <br><br>
+        For the receiver, the current should be low, below 20mA as it doesn't need a lot to run; however, I didn't use any 
         resistors as we didn't in class for this and when I asked if my motor circuit was okay, the use of resistance was 
-        explained. Researching this, I learned that the receiver has resistance inside it, limiting to a current between 20 
-        and 10 mA. 
+        explained. Researching this, I learned that the receiver has resistance inside it, limiting to a current between 10 
+        and 20 mA. 
         <br>
         As for the LED strip, it doesn't say how many LEDs there are, but a rough estimate would be around 295 LEDs. I got this 
         because the strip is 16.4 feet and around every 2 inches there are three LEDs. So I divided the inches by two and then 
@@ -240,13 +251,12 @@ void loop() {
       </p>
     </div>
     <img src="A5_circuit.JPG" alt="Actual photo of circuit used for assignment that has an LED strip replacing the motor and 
-    without a flyback diode." style="width: 50%; margin: 5%;"/>
+    without a flyback diode." style="width: 50%; margin: 2%;"/>
   </div>
   <p style="text-align: right;">A5: High(er) voltage and transistors! LED strip circuit photo</p>
-  <h2>GIF</h2>
+  <h2>GIF and Code!</h2>
   <img src="A5gif.gif" alt="Gif of actual circuit used for assignment that has an LED strip replacing the motor and 
-  without a flyback diode." style="width: 50%; margin: 5%;"/>
-  <h2>Code</h2>
+  without a flyback diode." style="margin: 2%;"/>
 <pre><code>
 // Mai Li Jorgensen
 // HCDE 439
@@ -336,8 +346,14 @@ void loop() {
   }
 }   </code></pre>
 
-    <h2>Serial Monitor Output:</h2>
-    <p> 
+    <h2 style="margin:1%">Serial Monitor Output:</h2>
+    <p>
+      As for the Serial, some of what was printed was information I thought was important from the example with the remote,
+      so I kept it, such as starting text and the information of the button presses. 
+      <br>
+      I added what the action would do, such as Lights Up/Down/Off and what the actual number was that was written for analogWrite(). 
+    </p>
+    <p style="font-family: Courier New"> 
         Using library version 4.4.1<br>
 Ready to receive IR signals at pin 2<br>
 Protocol=NEC Address=0x0 Command=0x9 Raw-Data=0xF609FF00 32 bits LSB first<br><br>
@@ -412,7 +428,7 @@ Lights Off<br>
                 // MB (motor B) is flowing from 10 to 13 (up)
                 Pin 2 & 10 HIGH
                 Pin 7 & 13 LOW
-            One back/one foward:
+            One back/one forward:
                 // MA is flowing from 7 to 2 (up)
                 // MB is flowing from 13 to 10 (down)
                 Pin 7 & 13 HIGH
