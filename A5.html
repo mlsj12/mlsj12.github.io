@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Mai Li's HCDE 439 Assignment 5!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Mai Li's Assignment 5!</h1>
+    <h2>Overview:</h2>
+    <p>
+        For A5, I tried very hard to do this as linearly as possible like in A1-A3; however, it was similar to A4 instead. I 
+        didn't know exactly what I was doing as we were warned in class that now we could really bust our Arduinos if we had 
+        stray wires or misconnections. Not wanting to mess up, I looked up more videos on transistors. <br>
+        <b>Transistors Explained - How transistors work: </b><a href="https://www.youtube.com/watch?v=J4oO7PT_nzQ">https://www.youtube.com/watch?v=J4oO7PT_nzQ</a>
+        <br>
+        <b>MOSFET Explained - How MOSFET Works: </b><a href="https://www.youtube.com/watch?v=AwRJsze_9m4">https://www.youtube.com/watch?v=AwRJsze_9m4</a>
+        <br>
+        <b>MOSFETs and Transistors with Arduino: </b><a href="https://www.youtube.com/watch?v=IG5vw6P9iY4">https://www.youtube.com/watch?v=IG5vw6P9iY4</a>
+        <br>
+        After learning more and understand that the transistor is powered by a small current, from the Arduino, which then controls
+        a bigger current, from the power supply, I had more of an idea of what I could create. I already had some ideas, but I 
+        settled on controlling the motor and fan with a remote. My brother has many, many, many fans, all of which have a power
+        button and 3 speed settings. 
+        I used two circuits we have done in class: using the remote control and then using a MOSFET transistor with an LED 
+        light strip.
+    </p>
+    <img src="A5_insirpation.jpg" alt="Two photos of two different circuits"/>
+    <figcaption>Inspiration circuits from class. <br>Left is turning a LED on with a remote. Right is using a MOSFET transistor
+    to control an LED light strip.</figcaption>
+    <br>
+    <p>
+        With these in mind, I was thinking I could just swap the LED strip with the motor and change the button code for the 
+        remote to be associated with different fan speeds. But before I went ahead, I did make sure with my professors so I 
+        didn't accidently blow something up and they agreed it worked!
+    </p>
+    <div class="header" style="margin-top: 2%;">
+      <img src="A5_schematic.JPG" alt="Page of grid paper with A5 requirements and schematic of the circuit described above." 
+      style="width: 50%;"/>
+      <div class="text">
+        <h2>Schematic Explanation:</h2>
+        <p>
+          After getting confirmation I was thinking about this correctly, I drew out my schematic from the circuit I had 
+          developed on the breadboard (I had some debugging to do and added a flyback diode to my circuit which is now also
+          shown in the schematic). Some of my questions were about the amount of resistance needed in this circuit. I got 
+          back that motors generally don't need resistance and since the professor okayed my circuit photo, I went ahead. 
+          <br><br>
+          I didn't have all the right symbols to draw this so I looked up how an IRemote receiver looked like in a schematic 
+          drawing and I got a couple different answers. I tried to find the exactly one we were using in class, but most I 
+          found where ones that didn't have a board like ours. 
+          <br><br>
+          With some more digging, I found one that was similar; I couldn't find a serial number on the one I have
+          to match the receiver module
+          to a datasheet. The datasheet is 
+          <a href="https://www.alldatasheet.com/datasheet-pdf/download/1221272/ETC2/KY-022.html">here.</a> You may have to 
+          download it to view it; however, I took the colored Pinout photo as the schematic and drew it similar to how it looks
+          in the photo. 
+        </p>
+      </div>
+    </div>
+    <figcaption>A5: High(er) voltage and transistors! motor schematic photo.</figcaption>
+    <h2 style="margin-bottom: 10px;">Resistance Use</h2>
+    <div class="header">
+        <p>
+            As I said above, I didn't use any resistance for either part of the circuit. I was following the IRemote demo
+            we had in class and I only put a resistor on the LED light we were trying to turn on and off. While following the 
+            LED light strip circuit with the MOSFET, there was also no resistor in that either. 
+            <br><br> 
+            As part of my video watching for more information, I did note that many had used resistors, but didn't explain how
+            they chose them, and I was worried if I picked the wrong one I would blow up my Arduino. 
+            Instead, before I connected the circuit to power, I reached out to the teaching team to ask those questions. I got
+            back the response I said above, usually there is no resistor for a motor and they proceeded to check my circuit as 
+            good without resistance and I proceeded. 
+        </p>
+    </div>
+    <div class="header" style="margin-top: 2%;">
+        <img src="A5_photo.JPG" alt="Circuit photo with IRemote receiver a the top of the breadboard and the motor connected
+        to external power in the bottom." style="width: 50%;"/>
+        <div class="text">
+            <h2>Circuit:</h2>
+            <p>
+                The circuit is a little more complex with wires because the sires soldered to my motor fell off and I didn't 
+                have time to go somewhere to resolder them. Instead I used alligator clips and additional wire connectors. 
+            </p>
+        </div>
+    </div>
+    <figcaption>Circuit photo with IRemote receiver a the top of the bread board and the motor connected to external power in 
+    the middle with a flyback diode at the bottom. </figcaption>
+
+    <div class="header">
+        <div class="text">
+          <h2 style="margin-top: 5%;">Code Explanation:</h2>
+          <p>
+            I tested my motor, connected to only ground and it worked fine in both directions; however using the code to change
+            the motor speeds and on/off, the fan was very, very slow to start. For Speed 1 it didn't really move, but it would 
+            output the correct comment and make clicking sound of the speed? For Speed 2 it would do a small burst every couple
+            seconds with faster clicks and the right comment. For Speed 3, it would go fast for a bit and then stop and then go 
+            fast for a bit again, also with the comment correct. And for power, it would turn off correctly. 
+          </p>
+        </div>
+      </div>
+    <pre><code>
+// Mai Li Jorgensen
+// HCDE 439
+// A5: High(er) voltage and transistors!
+        
+// DISCLAIMER: some of the code is taken from the remote library example. 
+        
+/*
+* Specify which protocol(s) should be used for decoding. 
+// Makes the process faster as the remote will look for all protocol if one isn't defined
+* If no protocol is defined, all protocols are active.
+*/
+#define DECODE_NEC  1
+// add the remote library
+#include < IRremote.h >
+        
+//define variables
+int remote_pin = 2;
+//PWM pin to analogWrite the speeds
+int motor_pin = 9;
+        
+void setup() {
+    //  how fast data is sent/received in bits per second
+    Serial.begin(115200);
+    // Just to know which program is running on my Arduino -- *all taken from example*
+    // (F()) stores this information in Flash memory 
+    / __FILE__ adds the file name of the sketch
+    // __DATE__ adds the date of the last compiled sketch
+    // VERSION_IRREMOTE adds version of the library being used
+    Serial.println(F("START " __FILE__ " from " __DATE__ "\r\nUsing library version " VERSION_IRREMOTE));
+    // initialize the pin that the receiver is on
+    // blink when the IR signal is first received  
+    IrReceiver.begin(remote_pin, ENABLE_LED_FEEDBACK); 
+    // prints a confirmation of which pin the remote is being received at
+    Serial.print(F("Ready to receive IR signals at pin "));
+    Serial.println(remote_pin);
+    // initialize the motor pin
+    pinMode(motor_pin, OUTPUT);
+}
+        
+void loop() {
+    // checks to see if the remote receiver got a signal from the remote that a button was pressed
+    // if it gets a signal, it returns True and this code runs
+    if (IrReceiver.decode()) {
+    // Only print UNKNOWN commands detected
+    if (IrReceiver.decodedIRData.protocol == UNKNOWN) {
+        IrReceiver.printIRResultShort(&Serial);
+        IrReceiver.printIRResultRawFormatted(&Serial, true);
+        }
+    // Print a short summary of received data
+    //IrReceiver.printIRResultShort(&Serial);
+    // is the signal is not known, print a formatted raw data to see the issue
+    //if (IrReceiver.decodedIRData.protocol == UNKNOWN) {
+        //IrReceiver.printIRResultRawFormatted(&Serial, true);
+        //}
+        // print blank line
+        Serial.println();
+        // resets the receiver and allows to get another input from the remote.
+        IrReceiver.resume(); 
+        
+    // better readability for the four different commands than an if-statement
+    switch (IrReceiver.decodedIRData.command){
+    // if power button is pressed, write comment and turn PWM to 0
+    case 0x45:
+        Serial.println("Fan Off");
+        analogWrite(motor_pin, 0);
+        // delay one second
+        delay (1000);
+        break;
+    // if number 1 is pressed, turn fan to a low PWM speed and print comment
+        case 0xC:
+        Serial.println("Speed 1");
+        analogWrite(motor_pin, 85);
+        // delay one second
+        delay (1000);
+        break;
+    // if button 2 is pressed, turn fan higher and write comment
+    case 0x18:
+        Serial.println("Speed 2");
+        analogWrite(motor_pin, 170);
+        // delay one second
+        delay (1000);
+        break;
+    // if button 3 is pressed, turn fan highest and write comment
+        case 0x5E:
+        Serial.println("Speed 3");
+        analogWrite(motor_pin, 255);
+        // delay one second
+        delay (1000);
+        break;
+    }
+  }
+}
+</code></pre>
+<h2>A Complete Switch!</h2>
+      <p>
+        After spending a lot more time on this circuit, I still couldn't figure out why the circuit wasn't working how I wanted.
+        Either the motor never turned on or it made sounds but no motion was seen. I tried really hard to debug the code, the 
+        circuit, and the logic I was using to try to piece together everything. In the end, I decided that I had to get this 
+        assignment in, even if that meant not doing my original plan of making a speed controlled fan for my brother. 
+      </p>
+<div class="header" style="margin-top: 2%;">
+    <img src="A5_schematic_real.JPG" alt="Page of grid paper with A5 requirements and schematic of a similar circuit with a LED strip 
+    replaced the motor." style="width: 50%;"/>
+    <div class="text">
+      <h2>Schematic!</h2>
+      <p>
+        I didn't cut all losses and decided to take just the LED strip that worked in class and somewhat control it like the 
+        motor. So in my ACTUAL schematic, I only replaced the motor with the LED strip and got rid of the flyback diode as we
+        didn't use one in class.
+      </p>
+      <h2>Calculations!</h2>
+      <p>
+        With this new circuit, there is 5V going into the remote receiver and 12 into the LED strip. 
+        <br>
+        For the receiver, the current should be low below 20mA as it doesn't need a lot to run; however, I didn't use any 
+        resistors as we didn't in class for this and when I asked if my motor circuit was okay, the use of resistance was 
+        explained. Researching this, I learned that the receiver has resistance inside it, limiting to a current between 20 
+        and 10 mA. 
+        <br>
+        As for the LED strip, it doesn't say how many LEDs there are, but a rough estimate would be around 295 LEDs. I got this 
+        because the strip is 16.4 feet and around every 2 inches there are three LEDs. So I divided the inches by two and then 
+        multiplied by three to get 295. Since these are white LEDs, each run at 20mA, which gives a current of 5.9mA taken 
+        by all of the LEDs in the strip.
+      </p>
+    </div>
+  </div>
+  <figcaption>A5: High(er) voltage and transistors! LED strip schematic photo.</figcaption>
+
+  <div class="header">
+    <div class="text">
+      <h2 style="margin-top: 5%;">Circuit Explanation:</h2>
+      <p>
+        I decided to switch because I needed to get this assignment done and I was tired of trying to debug the same issue
+        with no luck. So instead, as I said above, I switched to an LED strip to control how dim or bright it is. 
+      </p>
+    </div>
+    <img src="A5_circuit.JPG" alt="Actual photo of circuit used for assignment that has an LED strip replacing the motor and 
+    without a flyback diode." style="width: 50%; margin: 5%;"/>
+  </div>
+  <p style="text-align: right;">A5: High(er) voltage and transistors! LED strip circuit photo</p>
+  <h2>GIF</h2>
+  <img src="A5gif.gif" alt="Gif of actual circuit used for assignment that has an LED strip replacing the motor and 
+  without a flyback diode." style="width: 50%; margin: 5%;"/>
+  <h2>Code</h2>
+<pre><code>
+// Mai Li Jorgensen
+// HCDE 439
+// A5: High(er) voltage and transistors!
+
+// DISCLAIMER: some of the code is taken from the remote library example.
+    
+/*
+* Specify which protocol(s) should be used for decoding.
+// Makes the process faster as the remote will look for all protocol if one isn't defined
+* If no protocol is defined, all protocols are active.
+*/
+//#define DECODE_NEC  1
+    
+// add the remote library
+#include < IRremote.h >
+
+//define pins
+int remote_pin = 2;
+//PWM pin to analogWrite the speeds
+int LED_pin = 9;
+    
+// brightness variable to control the up or down of the LED string
+int bright = 0;
+    
+void setup() {
+    //  how fast data is sent/received in bits per second
+    Serial.begin(115200);
+    // Just to know which program is running on my Arduino -- *all taken from example*
+    // (F()) stores this information in Flash memory
+    // __FILE__ adds the file name of the sketch
+    // __DATE__ adds the date of the last compiled sketch
+    // VERSION_IRREMOTE adds version of the library being used
+    Serial.println(F("START " __FILE__ " from " __DATE__ "\r\nUsing library version " VERSION_IRREMOTE));
+    // initialize the pin that the receiver is on
+    // blink when the IR signal is first received 
+    IrReceiver.begin(remote_pin, ENABLE_LED_FEEDBACK); 
+    // prints a confirmation of which pin the remote is being received at
+    Serial.print(F("Ready to receive IR signals at pin "));
+    Serial.println(remote_pin);
+    // initialize the motor pin
+    pinMode(LED_pin, OUTPUT);
+}
+    
+void loop() {
+    // checks to see if the remote receiver got a signal from the remote that a button was pressed
+    // if it gets a signal, it returns True and this code runs
+    if (IrReceiver.decode()) {
+        // Print a short summary of received data
+        IrReceiver.printIRResultShort(&Serial);
+        // is the signal is not known, print a formatted raw data to see the issue
+        if (IrReceiver.decodedIRData.protocol == UNKNOWN) {
+            IrReceiver.printIRResultRawFormatted(&Serial, true);
+        }
+    // print blank line
+    Serial.println();
+    // resets the receiver and allows to get another input from the remote.
+    IrReceiver.resume();
+    
+    // better readability for the four different commands than an if-statement
+    switch (IrReceiver.decodedIRData.command){
+    // if the power button is pressed, the lights turn off
+    case 0x45:
+        Serial.println("Lights Off");
+        analogWrite(LED_pin, 0);
+        break;
+    // if the up arrow button is pressed, the lights up by 5 PWM
+    case 0x9:
+        Serial.println("Lights Up: ");
+        bright = bright + 5;
+        Serial.print(bright);
+        analogWrite(LED_pin, bright);
+        break;
+    // if the up arrow button is pressed, the lights down by 5 PWM
+    case 0x7:
+        Serial.println("Lights Down: ");
+        bright = bright - 5;
+        Serial.print(bright);
+        analogWrite(LED_pin, bright);
+        break;
+    }
+    
+    // check to see if the bright is in the right range and set it to off
+    if (bright <= 0 || bright >=255) {
+        bright = 0;
+    }
+  }
+}   </code></pre>
+
+    <h2>Serial Monitor Output:</h2>
+    <p> 
+        Using library version 4.4.1<br>
+Ready to receive IR signals at pin 2<br>
+Protocol=NEC Address=0x0 Command=0x9 Raw-Data=0xF609FF00 32 bits LSB first<br><br>
+
+Lights Up: <br>
+5Protocol=NEC Address=0x0 Command=0x9 Repeat gap=39200us<br><br>
+
+Lights Up: <br>
+10Protocol=NEC Address=0x0 Command=0x9 Raw-Data=0xF609FF00 32 bits LSB first<br><br>
+
+Lights Up: <br>
+15Protocol=NEC Address=0x0 Command=0x9 Repeat gap=39200us<br><br>
+
+Lights Up: <br>
+20Protocol=NEC Address=0x0 Command=0x9 Raw-Data=0xF609FF00 32 bits LSB first<br><br>
+
+Lights Up: <br>
+25Protocol=NEC Address=0x0 Command=0x9 Raw-Data=0xF609FF00 32 bits LSB first<br><br>
+
+Lights Up: <br>
+30Protocol=NEC Address=0x0 Command=0x7 Raw-Data=0xF807FF00 32 bits LSB first<br><br>
+
+Lights Down: <br>
+25Protocol=NEC Address=0x0 Command=0x7 Repeat gap=39250us<br><br>
+
+Lights Down: <br>
+20Protocol=NEC Address=0x0 Command=0x7 Raw-Data=0xF807FF00 32 bits LSB first<br><br>
+
+Lights Down: <br>
+15Protocol=NEC Address=0x0 Command=0x45 Raw-Data=0xBA45FF00 32 bits LSB first<br><br>
+
+Lights Off<br>
+Protocol=NEC Address=0x0 Command=0x45 Repeat gap=39150us<br><br>
+
+Lights Off<br>
+    </p>
+
+
+    <h2 style="margin-top: 5%;">Additional Questions:</h2>
+    <b style="font-size: larger;">1: This is the datasheet for the n-mosfet transistor: 
+    <a href="https://www.diodes.com/assets/Datasheets/DMT6009LCT.pdf ">https://www.diodes.com/assets/Datasheets/DMT6009LCT.pdf.</a> 
+    What is the absolute maximum amount of current between pins 2 and 3?</b> 
+    <p>
+        Based on the datasheet, pins 2 and 3 are drain and source respectively. Then in the maximum ratings section, 
+        Pulsed Drain Current(10μs Pulse, Duty Cycle = 1%) is labeled as 80A.
+    </p>
+    <br>
+    <b style="font-size: larger;">2:  Draw a schematic for a circuit with using at least your arduino, a DC motor, a flyback 
+        diode, and capacitors between power and ground. Find parts with datasheets you could use for each of these schematic 
+        components.</b>
+    <img src="A5_two.JPG" alt="Circuit schematic of the above question."/>
+<br>
+<b style="font-size: larger;">3: Here is the datasheet for the L293D chip:<a href="https://www.ti.com/product/L293D">https://www.ti.com/product/L293D.</a>
+    Draw a schematic using at least your arduino, this chip, and two motors. Write (pseudo) code that shows how you would move 
+    the motors both forward, both back, then one forward one back, and one back then forward.</b>
+    <img src="A5_three.JPG" alt="Circuit schematic of the above question."/>
+    <p>
+        <pre><code>
+        SETUP:
+            Initialize all pins as outputs (1, 2, 7, 10, 13)
+        LOOP:
+            Both forward:
+                // current flows through 2 and 13 to 7 and 10 
+                Pins 2 & 13 HIGH
+                Pins 7 & 10 LOW
+            Both back
+                // current is reversed, flows through 7 and 10 back to 2 and 13
+                Pins 2 & 13 LOW
+                Pins 7 & 10 HIGH
+            One forward/one back:
+                // MA (motor A) is flowing from 2 to 7 (down)
+                // MB (motor B) is flowing from 10 to 13 (up)
+                Pin 2 & 10 HIGH
+                Pin 7 & 13 LOW
+            One back/one foward:
+                // MA is flowing from 7 to 2 (up)
+                // MB is flowing from 13 to 10 (down)
+                Pin 7 & 13 HIGH
+                Pin 2 & 10 LOW
+        </code></pre>
+    </p>
+ </body>
+</html>
