@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Mai Li's HCDE 439 Assignment 6!</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <h1>Mai Li's Assignment 6!</h1>
+    <h2>Overview:</h2>
+    <div class="header" style="margin-top: 2%;">
+      <img src="A6_schematic.jpg" alt="Page of grid paper with the assignment written out, idea written down, and the schematic 
+      of the circuit explained below.">
+      <div class="text">
+        <h2>Schematic Explanation:</h2>
+        <p>
+          For this assignment, I started at the start, by thinking about what I wanted the user to do with the website. I came 
+          up with the idea of a room checker, that takes in <b>two</b> sensors, a photoresistor and a thermisitor, to give the user 
+          a color that corresponds with both the room's tempature and brightness. It will also print some text on the page, at this 
+          point, I didn't know what text it would have--a summary of the results, the RGB values, or something in between--but I 
+          wanted some kind of text. 
+          <br><br>
+          For the website input for the Arduino, I want to include a button that turns on a red LED that notifies the user that
+          their "Room Check" is being proccessed. 
+        </p>     
+      </div>
+    </div>
+    <figcaption>A6: Talking to the Web! Schematic</figcaption>
+    <h2>Calculations:</h2>
+    <p style="font-family: Noto Sans Math; font-size: larger; margin-bottom: 0%;">
+      Red LED has a 1.8V drop: <br>
+      5v - 1.8v = 20mA &times; R --> <b>R = 160Ω+</b>
+    </p>
+    <p style="display: inline;">
+      For the circuit, I used a 220Ω resistor. The calculation above is the <b>minimum</b> amount of resistance needed for 
+      a red LED to keep the current at 20mA. Since the kit doesn't have a resistor that is exactly 160Ω, I went above the 
+      minimum amount to 220Ω. <br>
+      As for the two sensors, I created a voltage divider with the sensor and a 10KΩ resistor. I use 10KΩ for both these 
+      because these sensors will still do their job with a very limited current and it allows for more of the power for the 
+      LED. 
+    </p> 
+    <div class="header">
+      <div class="text">
+        <h2 style="margin-top: 5%;">Circuit Explanation:</h2>
+        <p>
+          For the circuit, I used my knowledge of LED and voltage dividers to set it up. I connected the LED to a single 
+          digital pin with a resistor before going to ground. For the voltage dividers, I connected both to 5V to keep them 
+          running before adding an analogIn pin <b>after</b> the sensor to actually get what they are sensing. <br><br>
+          I added the 10KΩ resistor to the circuit before ending them also at ground back on the Arduino. 
+        </p>
+      </div>
+      <img src="A6_photo.JPG" alt="Circuit photo, with the LED+resistor on the left, the sensors are on the right, taking from 
+      the same power source (5v) and then an analogIn pin takes their value afterwards." style="margin-top: 5%;">
+    </div>
+    <figcaption style="text-align: right;">A6: Talking to the Web! Circuit photo with the LED+resistor on the left, the
+      sensors are on the right</figcaption>
+    <h2 style="margin-top: 2%;">Code Explanation:</h2>
+    <h3>Arduino Code</h3>
+<pre><code>
+void setup() {
+  // start serial monitor at baud 9600
+  Serial.begin(9600);        
+  // set up the pin for the LED
+  pinMode(10, OUTPUT);
+}
+   
+void loop() {
+  // Initialize the max and min varibles for the photoresistor calibration using the opposite number
+  int light_max = 0;
+  int light_min = 1023; 
+  // initialize the current sensor value
+  int sensorValue = 0;
+  
+  // Calibrate the sensor for five seconds
+  while (millis() < 5000) {
+    // read the photoresistor value
+    sensorValue = analogRead(A1);
+    // Record the maximum sensor value
+    if (sensorValue > light_max) {
+      light_max = sensorValue;
+    }
+    // Record the minimum sensor value
+    if (sensorValue < light_min) {
+      light_min = sensorValue;
+    }
+  }
+
+  // Read the current sensor values after calibration
+  int light_value = analogRead(A1);
+  // map the photoresistor using the min and max to 0-255 (color hues)
+  int mapped_light = map(light_value, light_min, light_max, 0, 255);
+  // map the tempature using 0-1023 to 0-255 (color hues)
+  int mapped_temp = map(analogRead(A0), 0, 1023, 0, 255);
+   
+  // Send the mapped sensor values to the Serial monitor
+  Serial.print(mapped_light);
+  // enter a comma between the two inputs
+  Serial.print(",");
+  Serial.print(mapped_temp);
+  
+  // Check if data is available from the serial port
+  if (Serial.available() > 0) {
+    // Read incoming data
+    int inByte = Serial.read();        
+    // Turn on the LED if there is a signal
+    digitalWrite(5, HIGH);  
+    // Keep the LED on for 1 second        
+    delay(1000);                    
+    } else {
+      // Turn off the LED when no serial data
+      digitalWrite(5, LOW);           
+    }
+  }   
+</code></pre>
+  <h3 style="margin-top: 2%;">A6_index.html Code (Webpage's p5.js code)</h3>
+<pre><code>
+
+</code></pre>
+  <h2>Gif Explaination:</h2>
+
+
+ </body>
+</html>
