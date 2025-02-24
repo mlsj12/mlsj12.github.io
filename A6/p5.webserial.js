@@ -52,6 +52,7 @@
    * @method usedSerialPorts
    * @return {Array of SerialPort}
    */
+
   p5.prototype.usedSerialPorts = function() {
     return ports;
   }

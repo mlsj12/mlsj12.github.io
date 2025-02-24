@@ -19,12 +19,16 @@
         <p>
           For this assignment, I started at the start, by thinking about what I wanted the user to do with the website. I came 
           up with the idea of a room checker, that takes in <b>two</b> sensors, a photoresistor and a thermisitor, to give the user 
-          a color that corresponds with both the room's tempature and brightness. It will also print some text on the page, at this 
+          a color that corresponds with both the room's temperature and brightness (red/blue for hot and cold, and opacity of 
+          yellow for how bright/dim). 
+          It will also print some text on the page, at this 
           point, I didn't know what text it would have--a summary of the results, the RGB values, or something in between--but I 
           wanted some kind of text. 
           <br><br>
-          For the website input for the Arduino, I want to include a button that turns on a red LED that notifies the user that
-          their "Room Check" is being proccessed. 
+          I decided on just the RGB values for the color of the screen. 
+          <br><br>
+          For the website input to the Arduino, I want to include a button that turns on a red LED that notifies the user that
+          their "Check Room" is being proccessed. 
         </p>     
       </div>
     </div>
@@ -35,7 +39,7 @@
       5v - 1.8v = 20mA &times; R --> <b>R = 160Ω+</b>
     </p>
     <p style="display: inline;">
-      For the circuit, I used a 220Ω resistor. The calculation above is the <b>minimum</b> amount of resistance needed for 
+      For the LED, I used a 220Ω resistor. The calculation above is the <b>minimum</b> amount of resistance needed for 
       a red LED to keep the current at 20mA. Since the kit doesn't have a resistor that is exactly 160Ω, I went above the 
       minimum amount to 220Ω. <br>
       As for the two sensors, I created a voltage divider with the sensor and a 10KΩ resistor. I use 10KΩ for both these 
@@ -46,9 +50,13 @@
       <div class="text">
         <h2 style="margin-top: 5%;">Circuit Explanation:</h2>
         <p>
-          For the circuit, I used my knowledge of LED and voltage dividers to set it up. I connected the LED to a single 
-          digital pin with a resistor before going to ground. For the voltage dividers, I connected both to 5V to keep them 
-          running before adding an analogIn pin <b>after</b> the sensor to actually get what they are sensing. <br><br>
+          For the circuit, I used my knowledge of LED and voltage dividers to set it up. 
+          <br><br>
+          I connected the LED to a single 
+          digital pin with a resistor before going to ground. 
+          <br><br>
+          For the voltage dividers, I connected both to 5V to keep them 
+          running before adding an analogIn pin <b>after</b> the sensor to actually get what they are sensing.
           I added the 10KΩ resistor to the circuit before ending them also at ground back on the Arduino. 
         </p>
       </div>
@@ -57,70 +65,223 @@
     </div>
     <figcaption style="text-align: right;">A6: Talking to the Web! Circuit photo with the LED+resistor on the left, the
       sensors are on the right</figcaption>
+    <h2>Gif Explaination:</h2>
+    <img src="A6_gif.gif" alt="Gif of circuit connecting with website to turn on LED and change the background on the 
+    computer screen based on the temp and lighting of the room.">
     <h2 style="margin-top: 2%;">Code Explanation:</h2>
     <h3>Arduino Code</h3>
+    <p>
+      For the Ardunio code, I had to set up the sensors to get data and print it to the Serial after calibrating the
+      photoresistor. Then it sees if there is any data coming from the webserial, if there is the LED will turn on for a second.
+      Then it will proccess what reading each sensor is receiving at that point to then send back to the webserial to display 
+      the color shade. <br>
+      I had some problems with the order of this, putting the LED turning on last, but then it wouldn't turn on, so I changed
+      the order and the second the check button was pressed, the LED was on for a second. 
+    </p>
 <pre><code>
-void setup() {
-  // start serial monitor at baud 9600
-  Serial.begin(9600);        
-  // set up the pin for the LED
-  pinMode(10, OUTPUT);
-}
-   
-void loop() {
-  // Initialize the max and min varibles for the photoresistor calibration using the opposite number
-  int light_max = 0;
-  int light_min = 1023; 
-  // initialize the current sensor value
-  int sensorValue = 0;
+  void setup() {
+    // start serial monitor at baud 9600
+    Serial.begin(9600);         
+    // set up the pin for the LED
+    pinMode(5, OUTPUT); 
+  }
   
-  // Calibrate the sensor for five seconds
-  while (millis() < 5000) {
-    // read the photoresistor value
-    sensorValue = analogRead(A1);
-    // Record the maximum sensor value
-    if (sensorValue > light_max) {
-      light_max = sensorValue;
+  void loop() {
+    // Initialize the max and min variables for the photoresistor calibration using the opposite number
+    int light_max = 0;
+    int light_min = 1023;  
+    // initialize the current sensor value 
+    int sensorValue = 0;
+    // Calibrate the sensor for five seconds
+    while (millis() < 5000) {
+      // read the photoresistor value
+      sensorValue = analogRead(A1);
+      // Record the maximum sensor value
+      if (sensorValue > light_max) {
+        light_max = sensorValue;
+      }
+      // Record the minimum sensor value
+      if (sensorValue < light_min) {
+        light_min = sensorValue;
+      }
+
+    // Check if data is available from the serial port
+    if (Serial.available() > 0) { 
+      int inByte = Serial.read();    // Read incoming data
+      Serial.write(inByte); // send it back out as raw binary data
+      digitalWrite(5, HIGH);          // Turn on the LED
+      delay(1000);
+      // turn off LED when the information is sent
+      digitalWrite(5, LOW);
     }
-    // Record the minimum sensor value
-    if (sensorValue < light_min) {
-      light_min = sensorValue;
+    
+    // Read the current sensor values after calibration if feedback is received
+    int light_value = analogRead(A1);
+    // map the photoresistor using the min and max to 0-255 (color hues)
+    int mapped_light = map(light_value, light_min, light_max, 0, 255);
+    // map the tempature using 0-1023 to 0-255 (color hues)
+    int mapped_temp = map(analogRead(A0), 0, 1023, 0, 255);
+  
+    // Send the mapped sensor values to the Serial monitor
+    Serial.print(mapped_temp);
+    // enter a comma between the two inputs 
+    Serial.print(",");
+    Serial.println(mapped_light);
     }
   }
-
-  // Read the current sensor values after calibration
-  int light_value = analogRead(A1);
-  // map the photoresistor using the min and max to 0-255 (color hues)
-  int mapped_light = map(light_value, light_min, light_max, 0, 255);
-  // map the tempature using 0-1023 to 0-255 (color hues)
-  int mapped_temp = map(analogRead(A0), 0, 1023, 0, 255);
-   
-  // Send the mapped sensor values to the Serial monitor
-  Serial.print(mapped_light);
-  // enter a comma between the two inputs
-  Serial.print(",");
-  Serial.print(mapped_temp);
-  
-  // Check if data is available from the serial port
-  if (Serial.available() > 0) {
-    // Read incoming data
-    int inByte = Serial.read();        
-    // Turn on the LED if there is a signal
-    digitalWrite(5, HIGH);  
-    // Keep the LED on for 1 second        
-    delay(1000);                    
-    } else {
-      // Turn off the LED when no serial data
-      digitalWrite(5, LOW);           
-    }
-  }   
+    
 </code></pre>
   <h3 style="margin-top: 2%;">A6_index.html Code (Webpage's p5.js code)</h3>
+  <p>
+    Link to page is <a href="A6/A6_index.html">here.</a><br>
+    I've been having issues accessing it through this link, if you can't access it, let me know and I'll try to debug it some more. You may need to connect to the Arduino and use the code snippet above to truely see it working. 
+    <br>
+    For the JavaScript file, I had some difficulties with as I only took JavaScript back in 9th and 10th grade. From then, I 
+    mostly worked in HTML and Python, so I forgot a lot of the commands. However, with my knowledge of coding in general, I 
+    was able to sort of work through how to format the code to do what I wanted. As for the changing background color, I tried 
+    to explain in the comments what thought process I was going down, but the code still might not be completely accurate with 
+    what it is actually doing. 
+    <br><br>
+    Some of this code was from the examples we had in class, such as the initialization of the buttons. 
+    But I edited what actually appears on the website so it is orginal code. <br><br>
+    I also used `p5.js`, `p5.min.js`, and `p5.webserial.js` from the p5 library. As we were told in class these are needed
+    to connect the Arudino to the website and I didn't change anything here. 
+  </p>
 <pre><code>
-
+  // start a serial for the Arduino
+  let port;
+  // add in button variable to connect/disconnect Arduino
+  let connectBtn;
+  // variable to send a command to the Arduino
+  let sendBtn;
+  // declare variables for the current temperature and light received through Arduino
+  let currentLight = 0;
+  let currentTemp = 0;
+  
+  // variable for updating background only when button is pressed
+  let updateBackground = false;
+  
+  function setup() {
+    // set up the canvas size for the computer size
+    // add a background color of a light gray
+    createCanvas(windowWidth, windowHeight);
+    background(220);
+  
+    // start the serial connection
+    port = createSerial();
+  
+    // open ports that have been used previously 
+    // if the port is more than 0, use a baud rate of 57600
+    let usedPorts = usedSerialPorts();
+    if (usedPorts.length > 0) {
+      port.open(usedPorts[0], 9600);
+    }
+  
+    // start a button that connects to the Arduino
+    connectBtn = createButton("Connect to Arduino");
+    // place the button a little lower than middle of the screen 
+    connectBtn.position(windowWidth * 0.5, windowHeight * 0.75);
+    // when the button has a mouse pressing it, a click function is triggered
+    connectBtn.mousePressed(connectBtnClick);
+  
+    // add a new button that allows the user to check the room
+    sendBtn = createButton("Check Room");
+    // put button in the middle
+    sendBtn.position(windowWidth * 0.5, windowHeight * 0.5);
+    // when the button has a mouse pressing it, a click function is triggered
+    sendBtn.mousePressed(sendBtnClick);
+  
+    // add in text settings
+    textFont("system-ui", 50);
+    textStyle(BOLD);
+    textAlign(CENTER, CENTER);
+  }
+  
+  function draw() {
+    // this makes received text scroll up
+    // copy(0, 0, windowWidth, windowHeight, 0, -1, windowWidth, windowHeight);
+  
+    // reads in complete lines and prints them at the bottom of the canvas
+    let str = port.readUntil("\n");
+    if (str.length < 0) {
+      return;
+    }
+  
+    // if updatebackground is changed to true, change the background with this code
+    if (updateBackground) {
+      // formats data string based on where the comma lies (inserted in Arduino)
+      let datain = str.trim().split(",");
+  
+      // reading array and splitting into temp and light numbers
+      // round in case the numbers are not integers
+      // no need to map these as we already mapped them to color hues in the Arduino code
+      const temp = round(Number(datain[0]));
+      const light = round(Number(datain[1]));
+  
+      // define a list of RGB hues
+      let backgroundColor = [];
+  
+      // I want the light color to be different intensities of yellow based on the brightness
+      // I want when the temp is lower than half, the color that shows up is an intensity of blue
+      // and when it's hot I want the color to be red
+      if (temp < 127) {
+        // if temp is low the color is blue, the cooler, the more blue it gets
+        // must map since its out of 0 - 127 and I want it back to color hue of 0-255
+        let colortemp = round(map(255 - temp, 127, 255, 0, 255));
+        // mix yellow color (brightness) with the blue color for temperature
+        backgroundColor = [light, light, colortemp];
+      } else {
+        // map the temperature to the color hue for red, higher numbers
+        let tempred = round(map(temp, 127, 255, 0, 255));
+        // add the two red colors together 
+        let tempredplusyellow = tempred + light;
+        // re-map the colors back to color hue of 0-255
+        let mappedtemp = round(map(tempredplusyellow, 0, 510, 0, 255));
+        // create the high temp background color
+        backgroundColor = [mappedtemp, light, 0];
+      }
+  
+      // reset the background to intergers
+      background(round(backgroundColor[0]), round(backgroundColor[1]), round(backgroundColor[2]));
+      // print the backgroundColor on the page
+      // text color
+      fill(255);   
+      // text size
+      textSize(32);
+      // text displayed a little higher than the middle of the screen
+      text(`${backgroundColor[0]}, ${backgroundColor[1]}, ${backgroundColor[2]}`, windowWidth * 0.5, windowHeight * 0.25);
+      // set background to not update until button is pressed again
+      updateBackground = false;
+    }
+  
+    // changes button label based on connection status
+    if (!port.opened()) {
+      connectBtn.html("Connect to Arduino");
+      // turn background back to gray
+      background(220);
+    } else {
+      connectBtn.html("Disconnect");
+      // read from port until new line
+      let str = port.readUntil("\n")
+    }
+  }
+  
+  // connect the Arduino function
+  function connectBtnClick() {
+    if (!port.opened()) {
+      port.open("Arduino", 9600);
+    } else {
+      port.close();
+    }
+  }
+  
+  function sendBtnClick() {
+    // tell the user that Check Button was registered and is sent to the Arduino
+    port.write("LED ON\n");
+    console.log("sending command to Arduino")
+    // set the background based on data
+    updateBackground = true;
+  }
 </code></pre>
-  <h2>Gif Explaination:</h2>
-
-
  </body>
 </html>
