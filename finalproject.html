@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+   <title>Mai Li's Final Project!</title>
+
+   <link href="style.css" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+   <h1 style="color: #816cae">Final Project Documentation!</h1>
+   <h2 style="margin-top: 2%; color: #816cae">JetSetPump:</h2>
+   <h3 style="color: #816cae">Concept</h3>
+   <p>
+    For my final project, I designed a self-watering plant system that ensures plants receive the right amount of water over an extended period, especially when the owner is away, such as on vacation or a business trip.
+    <br><br>
+    This system will use a water pump, water sensor, and an Arduino to monitor and automate watering. When the soil moisture drops below a certain threshold, the system will activate the pump to deliver water from a reservoir directly to the plant.
+    <br><br>
+    The product combines technology and sustainability to give users a better way to take care of their plants by only needing to fill up the water reservoir when it it low. 
+   </p>
+
+   <h3 style="margin-top: 2%; color: #816cae">Bill of Materials:</h3>
+   <ul style="margin: 0%; margin-bottom: 0%;">
+    <li>12v additional power supply</li>
+    <li>Arduino and power wire</li>
+    <li>Hoya water sensor</li>
+    <li>12v water pump</li>
+    <li>MOSFET transistor</li>
+    <li>Various wires</li>
+    <li>Water container</li>
+    <li>Plant and pot</li>
+    <li>Cardboard</li>
+    <li>Tape</li>
+   </ul>
+
+   <h3 style="margin-top: 2%; color: #816cae">Schematic</h3>
+   <div class="header">
+    <img src="finalproject_schematic.jpg" alt="Page of grid paper with the assignment written out, schematic of three LED lights, 
+    calculations of resistance with red LEDs, and a pattern idea to create." style="height:300px"> 
+    <div class="text">
+        <p>
+            My schematic was the last thing I did before writing up my final project because I didn't know what it would turn 
+            out to be with what I wanted it to do. However, now that I used the pump instead of a spray bottle, my circuit is 
+            pretty simple. It uses a water pump (motor symbol) and a water sensor to feed an attached plant water when the level is too low. <br><br>
+            The power coming from the wall is controlled by the MOSFET transistor that is being powered by the Ardunio like the sensor. With little power, it can turn on and off the pump's power of 12v. 
+        </p>
+    </div>
+   </div>
+  <figcaption style="color: #816cae">Final project schematic</figcaption>
+
+  <h3 style="margin-top: 2%; color: #816cae">Technical Implementation</h3>
+  <p>
+    For my JetSetPump system, I have designed an automated self-watering plant system that monitors and maintains soil moisture levels.
+    <br><br>
+    The input device in my system is a <b>water sensor</b>, which continuously measures the amount of moisture that is in the soil. When the sensor detects that the water level has dropped below a predefined threshold, it sends a signal to the Ardunio, triggering the output device, a <b>water pump</b> that is connected to a reservoir and the potted plant.
+    <br><br>
+    My code ensures the pump waters the plant until until the soil moisture reaches enough water mositure for the plant. From previous testing of the pump, I determined the pump moves between 275 (completely sumbmerged in water) and 300-ish (as dry as possible). In this 25 difference, I preset the pump activation at 80% dryness (292). This makes sure the plant receives adequate hydration without the risk of overwatering.
+  </p>
+  <h4 style="margin-top: 2%; margin-bottom: 0%; color: #816cae">Code Snippet</h4>
+  <div class="header">
+  <pre style="margin: 0;"><code style="margin: 0;"> 
+// variable for the sensor and pump
+int sensorpin = 7;
+int mostfet = 6;
+
+// variable for the sensor output
+int value = 0;
+
+void setup() {
+  // start serial monitor
+  Serial.begin(9600);
+  // initize the sensor pin
+  pinMode(sensorpin, OUTPUT);
+  pinMode(mostfet, OUTPUT);
+}
+
+void loop() {
+  // start the sensor
+  digitalWrite(sensorpin, HIGH);
+
+  // write water level to serial
+  value = analogRead(A0);
+  Serial.print("Water Value: ");
+  Serial.println(value);
+
+  // stop the sensor
+  digitalWrite(sensorpin, LOW);
+  </code></pre>
+
+<pre style="margin: 0;"><code style="margin: 0;"> 
+  // fully sumerged = ~275 | as dry as can be = ~ 300
+  // if plant is 70% dry, give it some water
+  if (value > 292) {
+    // rotate pump for a second
+    digitalWrite(mostfet, HIGH);
+    delay(1000);
+    // turn off pump
+    digitalWrite(mostfet, LOW);
+  }
+
+  // check plant water level again
+  if (value > 292) {
+    // rotate pump for a second
+    digitalWrite(mostfet, HIGH);
+    delay(1000);
+    // turn off pump
+    digitalWrite(mostfet, LOW);
+  } else {
+    // if water is good, delay 2 seconds before loop repeats
+    delay(2000);
+  }
+}
+</code></pre>
+</div>
+
+  <h3 style="margin-top: 2%; color: #816cae">Phyiscal Implementation</h3>
+  <div class="header">
+  <img src="finalproject.JPG" style="height:300px; margin: 0">
+  <div class="text">
+  <p>
+    After I got the input and outputs sorted and the system was working each time, I started on the physical aspect of the system. While, not pretty, I made a stand and comparments for the Ardunio and "inners" to hide all that clutters the system visually. 
+    <br><br>
+    I started with the pump, it's very heavy on one side as it's a motor essensially. Despite the weight, I wanted it to be directly above the cleaned out clearers bottle I used. So I started with stabilizing the bottle to hold the extra weight on the top. 
+    <br>
+    I soon realized I also needed supports for the pump itself and added a platform coming out of the bottle's neck and supports downward as the cardboard wouldn't hold the entire pump. While the motor 
+  </p>
+  </div></div>
+  <p style="margin-top: 0">
+    was supported here, I decided to make a stand for the motor that is rounded, so it sits nicely on top and is easy to put back after refilling the water reservoir. 
+    <br><br>
+    Lastly, I put a cover over the stand and put the Ardunio and other wires inside behind the bottle to tidy everything up. 
+    <br><br>
+    * Unfortunately I didn't take any photos while I made the physical appearance, so there is no step-by-step for this part.  
+    </p>
+
+  <h3 style="margin-top: 2%; color: #816cae">Demo</h3>
+  <img src="JetSetPump! Demo.mp4" alt="Video demenstrating the final system.">
+  <figcaption style="color: #816cae"">Final Project Demo Video</figcaption>
+  <p>
+    <br>
+    If the video doesn't show up, it may be too big to render. Here is a YouTube link of the same video! <a href="https://youtu.be/KAGdFBPGfaQ">https://youtu.be/KAGdFBPGfaQ</a>
+  </p>
+  <img src="projectdemoimage.png">
+ </body>
+</html>
