@@ -39,38 +39,50 @@
     <img src="finalproject_schematic.jpg" alt="Page of grid paper with the assignment written out, schematic of three LED lights, 
     calculations of resistance with red LEDs, and a pattern idea to create." style="height:300px"> 
     <div class="text">
-        <p>
-            My schematic was the last thing I did before writing up my final project because I didn't know what it would turn 
-            out to be with what I wanted it to do. However, now that I used the pump instead of a spray bottle, my circuit is 
-            pretty simple. It uses a water pump (motor symbol) and a water sensor to feed an attached plant water when the level is too low. <br><br>
-            The power coming from the wall is controlled by the MOSFET transistor that is being powered by the Ardunio like the sensor. With little power, it can turn on and off the pump's power of 12v. 
-        </p>
+      <p>
+        My schematic was the last thing I did before writing up my final project because I didn't know what it would turn 
+        out to be with what I wanted it to do. However, now that I used the pump instead of a spray bottle, my circuit is 
+        pretty simple. It uses a water pump (motor symbol) and a water sensor to feed an attached plant water when the level is too low. <br><br>
+        The power coming from the wall is controlled by the MOSFET transistor that is being powered by the Ardunio like the sensor. With little power, it can turn on and off the pump's power of 12v. 
+      </p>
     </div>
    </div>
   <figcaption style="color: #816cae">Final project schematic</figcaption>
 
-  <h3 style="margin-top: 2%; color: #816cae">Technical Implementation</h3>
-  <p>
-    For my JetSetPump system, I have designed an automated self-watering plant system that monitors and maintains soil 
-    moisture levels.
-    <br><br>
-    The input device in my system is a <b>water sensor</b>, which continuously measures the amount of moisture that is in the 
-    soil. When the sensor detects that the water level has dropped below a predefined threshold, it sends a signal to the 
-    Ardunio, triggering the output device, a <b>water pump</b> that is connected to a reservoir and the potted plant.
-    <br><br>
-    My code ensures the pump waters the plant until the soil moisture reaches enough water mositure for the plant. From 
-    previous testing of the pump, I determined the pump moves between 275 (completely submerged in water) and 300-ish (as dry 
-    as possible). In this 25 step difference, I preset the pump activation at 80% dryness (292). This makes sure the plant receives 
-    adequate hydration without the risk of overwatering.
-  </p>
-  <h4 style="margin-top: 2%; margin-bottom: 0%; color: #816cae">Disclaimer</h4>
-  <p>
-    My proposal was to use a spray bottle water the plant and then the contingency if I couldn't make it work would be an 
-    LED/sound alert for users to water their plants. However, I really wanted to stick with the addition of self-watering 
-    plants as it can be used when owners are away. In the last class before presentations, my TA Danli suggested a pump that 
+  <h3 style="color: #816cae; margin-top: 2%;">Technical Implementation</h3>
+  <h4 style="margin-top: 1%; margin-bottom: 0%; color: #816cae">Disclaimer</h4>
+  <p style="font-size: 12px;">
+    My <a href="finalprojectproposal.html">proposal</a> was to use a spray bottle water the plant and a contingency (if I couldn't get the spray mechanism to work 
+    correctly in the time frame) of a 
+    LED/sound alert for users to water their plants manually. However, <b>I really wanted to stick with the addition of self-watering 
+    plants as it can be used when owners are away.</b> In the last class before presentations, my TA Danli suggested a pump that 
     would allow me to keep the water factor in my project. <br>
-    Even though this isn't using what I had proposed or the contingency plan, the system,
-    although changed, still does what I initially set out to do. 
+    <i><b>Even though this isn't using what I had proposed or the contingency plan, the system,
+    although changed, still does what I initially set out to do.</b></i>
+  </p>
+  <h4 style="margin-top: 1.5%; margin-bottom: 0%; color: #816cae">My Circuit</h4>
+  <div class="header">
+    <div class="text">
+      <p>
+        For my JetSetPump system, I have designed an automated self-watering plant system that monitors and maintains soil 
+        moisture levels.
+        <br><br>
+        The input device in my system is a <b>water sensor</b>, which continuously measures the amount of moisture that is in the 
+        soil. When the sensor detects that the water level has dropped below a predefined threshold, it sends a signal to the 
+        Ardunio, triggering the output device, a <b>water pump</b> that is connected to a reservoir and the potted plant.
+        <br><br>
+        My code ensures the pump waters the plant until the soil moisture reaches enough water mositure for the plant.
+      </p>
+    </div>
+    <img src="finalprojectcircuit.jpg" alt="Final circuit photo of the schematic above with a water sensor and a MOSFET 
+    transistor coming from the Arduino. A water pump connected to a 12v external power supply and MOSFET.">
+  </div>
+  <figcaption style="text-align: right; color: #816cae">Final project circuit photo</figcaption>
+  <p>
+    From previous testing of the pump, I determined the pump moves between 275 
+    (completely submerged in water) and 300-ish (as dry as possible). In this 25 step difference, I preset the pump 
+    activation at 80% dryness (292). This makes sure the plant receives 
+    adequate hydration without the risk of overwatering.
   </p>
   <h4 style="margin-top: 2%; margin-bottom: 0%; color: #816cae">Code Snippet</h4>
   <div class="header">
@@ -157,10 +169,10 @@ void loop() {
 
   <h3 style="margin-top: 2%; color: #816cae">Demo</h3>
   <p>
-    <br>
-    This video is too big for GitHub is upload properly. Here is a YouTube link of the video! 
-    <a href="https://youtu.be/KAGdFBPGfaQ">https://youtu.be/KAGdFBPGfaQ</a>
+    This video is too big for GitHub. Click the photo for the Youtube link!
+    <a href="https://youtu.be/KAGdFBPGfaQ">
+      <img src="projectdemoimage.png"/>
+    </a>
   </p>
-  <img src="projectdemoimage.png">
  </body>
 </html>
