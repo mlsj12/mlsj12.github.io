@@ -51,11 +51,26 @@
 
   <h3 style="margin-top: 2%; color: #816cae">Technical Implementation</h3>
   <p>
-    For my JetSetPump system, I have designed an automated self-watering plant system that monitors and maintains soil moisture levels.
+    For my JetSetPump system, I have designed an automated self-watering plant system that monitors and maintains soil 
+    moisture levels.
     <br><br>
-    The input device in my system is a <b>water sensor</b>, which continuously measures the amount of moisture that is in the soil. When the sensor detects that the water level has dropped below a predefined threshold, it sends a signal to the Ardunio, triggering the output device, a <b>water pump</b> that is connected to a reservoir and the potted plant.
+    The input device in my system is a <b>water sensor</b>, which continuously measures the amount of moisture that is in the 
+    soil. When the sensor detects that the water level has dropped below a predefined threshold, it sends a signal to the 
+    Ardunio, triggering the output device, a <b>water pump</b> that is connected to a reservoir and the potted plant.
     <br><br>
-    My code ensures the pump waters the plant until until the soil moisture reaches enough water mositure for the plant. From previous testing of the pump, I determined the pump moves between 275 (completely sumbmerged in water) and 300-ish (as dry as possible). In this 25 difference, I preset the pump activation at 80% dryness (292). This makes sure the plant receives adequate hydration without the risk of overwatering.
+    My code ensures the pump waters the plant until the soil moisture reaches enough water mositure for the plant. From 
+    previous testing of the pump, I determined the pump moves between 275 (completely submerged in water) and 300-ish (as dry 
+    as possible). In this 25 step difference, I preset the pump activation at 80% dryness (292). This makes sure the plant receives 
+    adequate hydration without the risk of overwatering.
+  </p>
+  <h4 style="margin-top: 2%; margin-bottom: 0%; color: #816cae">Disclaimer</h4>
+  <p>
+    My proposal was to use a spray bottle water the plant and then the contingency if I couldn't make it work would be an 
+    LED/sound alert for users to water their plants. However, I really wanted to stick with the addition of self-watering 
+    plants as it can be used when owners are away. In the last class before presentations, my TA Danli suggested a pump that 
+    would allow me to keep the water factor in my project. <br>
+    Even though this isn't using what I had proposed or the contingency plan, the system,
+    although changed, still does what I initially set out to do. 
   </p>
   <h4 style="margin-top: 2%; margin-bottom: 0%; color: #816cae">Code Snippet</h4>
   <div class="header">
@@ -70,7 +85,7 @@ int value = 0;
 void setup() {
   // start serial monitor
   Serial.begin(9600);
-  // initize the sensor pin
+  // initialize the sensor pin
   pinMode(sensorpin, OUTPUT);
   pinMode(mostfet, OUTPUT);
 }
@@ -89,7 +104,7 @@ void loop() {
   </code></pre>
 
 <pre style="margin: 0;"><code style="margin: 0;"> 
-  // fully sumerged = ~275 | as dry as can be = ~ 300
+  // fully submerged = ~275 | as dry as can be = ~ 300
   // if plant is 70% dry, give it some water
   if (value > 292) {
     // rotate pump for a second
@@ -114,20 +129,26 @@ void loop() {
 </code></pre>
 </div>
 
-  <h3 style="margin-top: 2%; color: #816cae">Phyiscal Implementation</h3>
+  <h3 style="margin-top: 2%; color: #816cae">Physical Implementation</h3>
   <div class="header">
   <img src="finalproject.JPG" style="height:300px; margin: 0">
   <div class="text">
   <p>
-    After I got the input and outputs sorted and the system was working each time, I started on the physical aspect of the system. While, not pretty, I made a stand and comparments for the Ardunio and "inners" to hide all that clutters the system visually. 
+    After I got the input and outputs sorted and the system was working each time, I started on the physical aspect of the 
+    system. While not pretty, I made a stand and compartments for the Ardunio and "inners" to hide all that clutters the 
+    system visually. 
     <br><br>
-    I started with the pump, it's very heavy on one side as it's a motor essensially. Despite the weight, I wanted it to be directly above the cleaned out clearers bottle I used. So I started with stabilizing the bottle to hold the extra weight on the top. 
+    I started with the pump, it's very heavy on one side as it's a motor essentially. Despite the weight, I wanted it to be 
+    directly above the cleaned out All Purpose Cleaner bottle I used. So I started with stabilizing the bottle to hold the extra weight
+    on the top. 
     <br>
-    I soon realized I also needed supports for the pump itself and added a platform coming out of the bottle's neck and supports downward as the cardboard wouldn't hold the entire pump. While the motor 
+    I soon realized I also needed support for the pump itself and added a platform coming out of the bottle's neck and 
+    supports downward as the cardboard wouldn't hold the entire pump. While the motor 
   </p>
   </div></div>
   <p style="margin-top: 0">
-    was supported here, I decided to make a stand for the motor that is rounded, so it sits nicely on top and is easy to put back after refilling the water reservoir. 
+    was supported here, I decided to make a stand for the motor that is rounded, so it sits nicely on top and is easy to put 
+    back after refilling the water reservoir. 
     <br><br>
     Lastly, I put a cover over the stand and put the Ardunio and other wires inside behind the bottle to tidy everything up. 
     <br><br>
@@ -135,7 +156,7 @@ void loop() {
     </p>
 
   <h3 style="margin-top: 2%; color: #816cae">Demo</h3>
-  <img src="JetSetPump! Demo.mp4" alt="Video demenstrating the final system.">
+  <img src="JetSetPump! Demo.mp4" alt="Video demonstrating the final system.">
   <figcaption style="color: #816cae"">Final Project Demo Video</figcaption>
   <p>
     <br>
