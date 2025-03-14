@@ -26,7 +26,7 @@
     <li>Arduino and power wire</li>
     <li>Hoya water sensor</li>
     <li>12v water pump</li>
-    <li>MOSFET transistor</li>
+    <li>MOSFET transistor (I realized I spelled it wrong in the code as a variable name)</li>
     <li>Various wires</li>
     <li>Water container</li>
     <li>Plant and pot</li>
@@ -43,7 +43,7 @@
         My schematic was the last thing I did before writing up my final project because I didn't know what it would turn 
         out to be with what I wanted it to do. However, now that I used the pump instead of a spray bottle, my circuit is 
         pretty simple. It uses a water pump (motor symbol) and a water sensor to feed an attached plant water when the level is too low. <br><br>
-        The power coming from the wall is controlled by the MOSFET transistor that is being powered by the Ardunio like the sensor. With little power, it can turn on and off the pump's power of 12v. 
+        The power coming from the wall is controlled by the MOSFET transistor that is being powered by the Arduino like the sensor. With little power, it can turn on and off the pump's power of 12v. 
       </p>
     </div>
    </div>
@@ -69,9 +69,9 @@
         <br><br>
         The input device in my system is a <b>water sensor</b>, which continuously measures the amount of moisture that is in the 
         soil. When the sensor detects that the water level has dropped below a predefined threshold, it sends a signal to the 
-        Ardunio, triggering the output device, a <b>water pump</b> that is connected to a reservoir and the potted plant.
+        Arduino, triggering the output device, a <b>water pump</b> that is connected to a reservoir and the potted plant.
         <br><br>
-        My code ensures the pump waters the plant until the soil moisture reaches enough water mositure for the plant.
+        My code ensures the pump waters the plant until the soil moisture reaches enough water moisture for the plant.
       </p>
     </div>
     <img src="finalprojectcircuit.jpg" alt="Final circuit photo of the schematic above with a water sensor and a MOSFET 
@@ -140,6 +140,21 @@ void loop() {
 }
 </code></pre>
 </div>
+<h4 style="margin-top: 2%; margin-bottom: 0%; color: #816cae">Snippet of Serial Monitor</h4>
+<p style="font-family: Courier New">
+  Water Value: 393<br>
+  Water Value: 302<br>
+  Water Value: 269<br>
+  Water Value: 263<br>
+  Water Value: 260<br>
+  Water Value: 250<br><br>
+</p>
+<p>
+  At first the sensor gets a high value, indicating that the plant's soil is dry. The pump is triggered and then it rechecks
+  seeing that the value goes down. This snippet is a snapshot of the Serial Monitor and the sensor isn't as exact; sometimes 
+  it will read a 405 then 328 and then 286. Since I didn't calibrate it (I tested with the sensor submerged in water and then 
+  completely dry) this readings are not surprising. 
+</p>
 
   <h3 style="margin-top: 2%; color: #816cae">Physical Implementation</h3>
   <div class="header">
@@ -147,7 +162,7 @@ void loop() {
   <div class="text">
   <p>
     After I got the input and outputs sorted and the system was working each time, I started on the physical aspect of the 
-    system. While not pretty, I made a stand and compartments for the Ardunio and "inners" to hide all that clutters the 
+    system. While not pretty, I made a stand and compartments for the Arduino and "inners" to hide all that clutters the 
     system visually. 
     <br><br>
     I started with the pump, it's very heavy on one side as it's a motor essentially. Despite the weight, I wanted it to be 
@@ -162,7 +177,7 @@ void loop() {
     was supported here, I decided to make a stand for the motor that is rounded, so it sits nicely on top and is easy to put 
     back after refilling the water reservoir. 
     <br><br>
-    Lastly, I put a cover over the stand and put the Ardunio and other wires inside behind the bottle to tidy everything up. 
+    Lastly, I put a cover over the stand and put the Arduino and other wires inside behind the bottle to tidy everything up. 
     <br><br>
     * Unfortunately I didn't take any photos while I made the physical appearance, so there is no step-by-step for this part.  
     </p>
